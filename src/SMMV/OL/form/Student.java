@@ -5,6 +5,8 @@
 package SMMV.OL.form;
 
 import SMMV.Connection.connection_ol;
+import SMMV.Main.Dashboard_ol;
+import SMMV.OL.gui.OL_Subject;
 import SMMV.OL.model.OtherSubject;
 import SMMV.Validation.Validation;
 import java.awt.Color;
@@ -13,6 +15,7 @@ import java.util.HashMap;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
@@ -27,6 +30,17 @@ public class Student extends javax.swing.JPanel {
 //    HashMap<String, String> other_subject_map = new HashMap<>();
 //    HashMap<String, OtherSubject> otherSubjectHashMap = new HashMap<>();
 
+    public JTable getOlTable() {
+        return olTable;
+    }
+
+    public void setOlTable(JTable olTable) {
+        this.olTable = olTable;
+    }
+    
+    
+
+   private Dashboard_ol dashboard;
     /**
      * Creates new form Student
      */
@@ -165,6 +179,11 @@ public class Student extends javax.swing.JPanel {
         geography = new javax.swing.JCheckBox();
         jLabel11 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
+        background3 = new SMMV.Component.Background();
+        ol_subject_button = new SMMV.Component.ButtonGradient();
+        jLabel27 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        olTable = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
         mother_name_feild = new javax.swing.JTextField();
@@ -417,6 +436,65 @@ public class Student extends javax.swing.JPanel {
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
+        background3.setBackground(new java.awt.Color(0, 0, 0));
+
+        ol_subject_button.setText("Select Subject");
+        ol_subject_button.setColor1(new java.awt.Color(0, 0, 204));
+        ol_subject_button.setColor2(new java.awt.Color(139, 139, 252));
+        ol_subject_button.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        ol_subject_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ol_subject_buttonActionPerformed(evt);
+            }
+        });
+
+        jLabel27.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel27.setText("Select Grade 10 & 11 Subject");
+
+        olTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Subject Id", "Subject Name"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(olTable);
+
+        javax.swing.GroupLayout background3Layout = new javax.swing.GroupLayout(background3);
+        background3.setLayout(background3Layout);
+        background3Layout.setHorizontalGroup(
+            background3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, background3Layout.createSequentialGroup()
+                .addContainerGap(15, Short.MAX_VALUE)
+                .addGroup(background3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jScrollPane1)
+                    .addGroup(background3Layout.createSequentialGroup()
+                        .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ol_subject_button, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(14, 14, 14))
+        );
+        background3Layout.setVerticalGroup(
+            background3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(background3Layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addGroup(background3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ol_subject_button, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout background2Layout = new javax.swing.GroupLayout(background2);
         background2.setLayout(background2Layout);
         background2Layout.setHorizontalGroup(
@@ -424,13 +502,6 @@ public class Student extends javax.swing.JPanel {
             .addGroup(background2Layout.createSequentialGroup()
                 .addGap(6, 6, 6)
                 .addGroup(background2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(background2Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addGroup(background2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(background2Layout.createSequentialGroup()
-                                .addComponent(background5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(499, 499, 499))))
                     .addGroup(background2Layout.createSequentialGroup()
                         .addGroup(background2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(background2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -462,7 +533,17 @@ public class Student extends javax.swing.JPanel {
                                 .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(email_field1)))
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(background2Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addGroup(background2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, background2Layout.createSequentialGroup()
+                                .addComponent(background5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(background3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(background2Layout.createSequentialGroup()
+                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addGap(9, 9, 9))
         );
         background2Layout.setVerticalGroup(
@@ -511,7 +592,9 @@ public class Student extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel10)
                 .addGap(18, 18, 18)
-                .addComponent(background5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(background2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(background3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(background5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(12, 12, 12))
         );
 
@@ -1059,16 +1142,41 @@ public class Student extends javax.swing.JPanel {
             dance.setEnabled(false);
             drama.setEnabled(false);
             art.setEnabled(false);
+             ol_subject_button.setEnabled(true);
         }else{
             
+            ol_subject_button.setEnabled(false);
+            sinhala.setEnabled(true);
+            english.setEnabled(true);
+            maths.setEnabled(true);
+            science.setEnabled(true);
+            buddhist.setEnabled(true);
+            civic.setEnabled(true);
+            ict.setEnabled(true);
+            health.setEnabled(true);
+            history.setEnabled(true);
+            pts.setEnabled(true);
+            tamil.setEnabled(true);
+            geography.setEnabled(true);
+            music.setEnabled(true);
+            dance.setEnabled(true);
+            drama.setEnabled(true);
+            art.setEnabled(true);
         }
     }//GEN-LAST:event_gradeComboItemStateChanged
+
+    private void ol_subject_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ol_subject_buttonActionPerformed
+        OL_Subject subject = new OL_Subject(dashboard, true, this);
+        subject.setLocationRelativeTo(dashboard);
+        subject.setVisible(true);
+    }//GEN-LAST:event_ol_subject_buttonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox art;
     private SMMV.Component.Background background1;
     private SMMV.Component.Background background2;
+    private SMMV.Component.Background background3;
     private SMMV.Component.Background background4;
     private SMMV.Component.Background background5;
     private SMMV.Component.Background background6;
@@ -1112,6 +1220,7 @@ public class Student extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1122,6 +1231,7 @@ public class Student extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
@@ -1137,6 +1247,8 @@ public class Student extends javax.swing.JPanel {
     private javax.swing.JTextField mobile_field;
     private javax.swing.JTextField mother_name_feild;
     private javax.swing.JCheckBox music;
+    private javax.swing.JTable olTable;
+    private SMMV.Component.ButtonGradient ol_subject_button;
     private javax.swing.JCheckBox pts;
     private javax.swing.JCheckBox science;
     private javax.swing.JCheckBox sinhala;
