@@ -1,0 +1,707 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
+ */
+package SMMV.OL.form;
+
+import SMMV.Connection.connection_ol;
+import com.formdev.flatlaf.FlatClientProperties;
+import java.awt.Color;
+import java.sql.ResultSet;
+import java.util.Vector;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+
+/**
+ *
+ * @author user
+ */
+public class Subject extends javax.swing.JPanel {
+
+    String subID = "";
+    String classID = "";
+
+    /**
+     * Creates new form Subject
+     */
+    public Subject() {
+        initComponents();
+        inti();
+    }
+
+    private void inti() {
+
+        clear();
+
+        subjectField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter Subject");
+        JTableHeader tableHeader = subjectTable.getTableHeader();
+        JTableHeader tableHeader2 = class_table.getTableHeader();
+        tableHeader.setBackground(new Color(0, 0, 255));
+        tableHeader2.setBackground(new Color(0, 0, 255));
+        tableHeader.setForeground(Color.WHITE);
+        tableHeader2.setForeground(Color.WHITE);
+
+        buttonGradient2.setEnabled(false);
+        buttonGradient3.setEnabled(false);
+        buttonGradient6.setEnabled(false);
+
+        subID = "";
+
+        try {
+
+            ResultSet rs = connection_ol.search("SELECT * FROM `subject` INNER JOIN `subject_type` ON `subject_type`.`id` = `subject`.`subject_type_id` WHERE `status_status_id` = '1'");
+
+            DefaultTableModel model = (DefaultTableModel) subjectTable.getModel();
+            model.setRowCount(0);
+
+            while (rs.next()) {
+                Vector supplierVector = new Vector();
+                supplierVector.add(rs.getString("subject_id"));
+                supplierVector.add(rs.getString("subject_name"));
+                supplierVector.add(rs.getString("subject_type.subject_type"));
+
+                model.addRow(supplierVector);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+
+            ResultSet rs = connection_ol.search("SELECT * FROM `class_has_grade` INNER JOIN `class` ON `class_has_grade`.`class_class_id` = `class`.`class_id` "
+                    + "INNER JOIN `grade` ON `class_has_grade`.`grade_grade_id` = `grade`.`grade_id`");
+
+            DefaultTableModel model = (DefaultTableModel) class_table.getModel();
+            model.setRowCount(0);
+
+            while (rs.next()) {
+                Vector supplierVector = new Vector();
+                supplierVector.add(rs.getString("class_has_grade_id"));
+                supplierVector.add(rs.getString("grade.grade"));
+                supplierVector.add(rs.getString("class.class_name"));
+
+                model.addRow(supplierVector);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Vector user_typeVector = new Vector();
+            user_typeVector.add("Subject Type...");
+
+            ResultSet subRS = connection_ol.search("SELECT * FROM `subject_type`");
+
+            while (subRS.next()) {
+                user_typeVector.add(subRS.getString("subject_type"));
+            }
+
+            jComboBox2.setModel(new DefaultComboBoxModel<>(user_typeVector));
+
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Vector user_typeVector = new Vector();
+            user_typeVector.add("Select Grade...");
+
+            ResultSet subRS = connection_ol.search("SELECT * FROM `grade`");
+
+            while (subRS.next()) {
+                user_typeVector.add(subRS.getString("grade"));
+            }
+
+            jComboBox1.setModel(new DefaultComboBoxModel<>(user_typeVector));
+
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Vector user_typeVector = new Vector();
+            user_typeVector.add("Select Class...");
+
+            ResultSet subRS = connection_ol.search("SELECT * FROM `class`");
+
+            while (subRS.next()) {
+                user_typeVector.add(subRS.getString("class_name"));
+            }
+
+            jComboBox3.setModel(new DefaultComboBoxModel<>(user_typeVector));
+
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void clear() {
+
+        subjectField.setText("Enter Subject");
+
+        jComboBox2.setSelectedIndex(0);
+        jComboBox1.setSelectedIndex(0);
+        jComboBox3.setSelectedIndex(0);
+
+        buttonGradient1.setEnabled(true);
+        buttonGradient4.setEnabled(true);
+
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        background1 = new SMMV.Component.Background();
+        background4 = new SMMV.Component.Background();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        buttonGradient1 = new SMMV.Component.ButtonGradient();
+        buttonGradient2 = new SMMV.Component.ButtonGradient();
+        buttonGradient3 = new SMMV.Component.ButtonGradient();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        subjectTable = new javax.swing.JTable();
+        jLabel8 = new javax.swing.JLabel();
+        subjectField = new javax.swing.JTextField();
+        jComboBox2 = new javax.swing.JComboBox<>();
+        jLabel9 = new javax.swing.JLabel();
+        background2 = new SMMV.Component.Background();
+        jLabel4 = new javax.swing.JLabel();
+        background5 = new SMMV.Component.Background();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        buttonGradient4 = new SMMV.Component.ButtonGradient();
+        buttonGradient6 = new SMMV.Component.ButtonGradient();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        class_table = new javax.swing.JTable();
+        jComboBox3 = new javax.swing.JComboBox<>();
+
+        setBackground(new java.awt.Color(0, 0, 0));
+
+        background4.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SMMV/OL/img/subject.png"))); // NOI18N
+
+        javax.swing.GroupLayout background4Layout = new javax.swing.GroupLayout(background4);
+        background4.setLayout(background4Layout);
+        background4Layout.setHorizontalGroup(
+            background4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(background4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        background4Layout.setVerticalGroup(
+            background4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(background4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel2.setText("Add New Subject");
+
+        buttonGradient1.setText("Add Subject");
+        buttonGradient1.setColor1(new java.awt.Color(0, 0, 153));
+        buttonGradient1.setColor2(new java.awt.Color(139, 139, 252));
+        buttonGradient1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        buttonGradient1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonGradient1ActionPerformed(evt);
+            }
+        });
+
+        buttonGradient2.setText("Update Subject");
+        buttonGradient2.setColor1(new java.awt.Color(0, 0, 153));
+        buttonGradient2.setColor2(new java.awt.Color(139, 139, 252));
+        buttonGradient2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        buttonGradient2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                buttonGradient2MouseClicked(evt);
+            }
+        });
+        buttonGradient2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonGradient2ActionPerformed(evt);
+            }
+        });
+
+        buttonGradient3.setText("Delete Subject");
+        buttonGradient3.setColor1(new java.awt.Color(0, 0, 153));
+        buttonGradient3.setColor2(new java.awt.Color(139, 139, 252));
+        buttonGradient3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        buttonGradient3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonGradient3ActionPerformed(evt);
+            }
+        });
+
+        subjectTable.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        subjectTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Subject Number", "Subject Name", "Subject Type"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        subjectTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                subjectTableMousePressed(evt);
+            }
+        });
+        subjectTable.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                subjectTableKeyPressed(evt);
+            }
+        });
+        jScrollPane2.setViewportView(subjectTable);
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel8.setText("Enter Subject Name");
+
+        subjectField.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        jComboBox2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel9.setText("Select Subject Type");
+
+        javax.swing.GroupLayout background1Layout = new javax.swing.GroupLayout(background1);
+        background1.setLayout(background1Layout);
+        background1Layout.setHorizontalGroup(
+            background1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, background1Layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(background1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(background1Layout.createSequentialGroup()
+                        .addGroup(background1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(subjectField))
+                        .addGap(18, 18, 18)
+                        .addGroup(background1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(buttonGradient1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, background1Layout.createSequentialGroup()
+                        .addComponent(background4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, background1Layout.createSequentialGroup()
+                        .addComponent(buttonGradient2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(buttonGradient3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(15, 15, 15))
+        );
+        background1Layout.setVerticalGroup(
+            background1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(background1Layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(background1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(background4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(17, 17, 17)
+                .addGroup(background1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(background1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jComboBox2)
+                    .addComponent(subjectField, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(buttonGradient1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(background1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(buttonGradient2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonGradient3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(14, Short.MAX_VALUE))
+        );
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel4.setText("Add New Class");
+
+        background5.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SMMV/OL/img/teacher.png"))); // NOI18N
+
+        javax.swing.GroupLayout background5Layout = new javax.swing.GroupLayout(background5);
+        background5.setLayout(background5Layout);
+        background5Layout.setHorizontalGroup(
+            background5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(background5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        background5Layout.setVerticalGroup(
+            background5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(background5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel6.setText("Select Class");
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel7.setText("Select Grade");
+
+        jComboBox1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        buttonGradient4.setText("Add Class");
+        buttonGradient4.setColor1(new java.awt.Color(0, 0, 153));
+        buttonGradient4.setColor2(new java.awt.Color(139, 139, 252));
+        buttonGradient4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        buttonGradient4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonGradient4ActionPerformed(evt);
+            }
+        });
+
+        buttonGradient6.setText("Update Class");
+        buttonGradient6.setColor1(new java.awt.Color(0, 0, 153));
+        buttonGradient6.setColor2(new java.awt.Color(139, 139, 252));
+        buttonGradient6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        buttonGradient6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonGradient6ActionPerformed(evt);
+            }
+        });
+
+        class_table.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Class Number", "Grade", "Class Name"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        class_table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                class_tableMousePressed(evt);
+            }
+        });
+        jScrollPane1.setViewportView(class_table);
+        if (class_table.getColumnModel().getColumnCount() > 0) {
+            class_table.getColumnModel().getColumn(0).setResizable(false);
+            class_table.getColumnModel().getColumn(1).setResizable(false);
+            class_table.getColumnModel().getColumn(2).setResizable(false);
+        }
+
+        jComboBox3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        javax.swing.GroupLayout background2Layout = new javax.swing.GroupLayout(background2);
+        background2.setLayout(background2Layout);
+        background2Layout.setHorizontalGroup(
+            background2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, background2Layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addGroup(background2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, background2Layout.createSequentialGroup()
+                        .addComponent(background5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(background2Layout.createSequentialGroup()
+                        .addGroup(background2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(buttonGradient4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)
+                            .addComponent(jComboBox3, javax.swing.GroupLayout.Alignment.LEADING, 0, 215, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(background2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.LEADING, 0, 236, Short.MAX_VALUE)
+                            .addComponent(buttonGradient6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGap(15, 15, 15))
+        );
+        background2Layout.setVerticalGroup(
+            background2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(background2Layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addGroup(background2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(background5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(background2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(background2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(background2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(buttonGradient4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonGradient6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 384, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(16, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(background1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(background2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(background1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(background2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void buttonGradient1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGradient1ActionPerformed
+        String subName = subjectField.getText();
+        int typeID = jComboBox2.getSelectedIndex();
+
+        try {
+
+            ResultSet chackrs = connection_ol.search("SELECT * FROM `subject` WHERE `subject_name` = '" + subName + "'");
+
+            if (subName.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please Enter Subject Name", "Warning", JOptionPane.WARNING_MESSAGE);
+            } else if (chackrs.next()) {
+                JOptionPane.showMessageDialog(this, "This Subject already accessed", "Warning", JOptionPane.WARNING_MESSAGE);
+            } else if (typeID == 0) {
+                JOptionPane.showMessageDialog(this, "Please Select Subject Name", "Warning", JOptionPane.WARNING_MESSAGE);
+            } else {
+
+                connection_ol.iud("INSERT INTO `subject` (`subject_name`,`status_status_id`,`subject_type_id`) VALUES ('" + subName + "','1','" + typeID + "')");
+
+                inti();
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }//GEN-LAST:event_buttonGradient1ActionPerformed
+
+    private void subjectTableKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_subjectTableKeyPressed
+
+    }//GEN-LAST:event_subjectTableKeyPressed
+
+    private void subjectTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_subjectTableMousePressed
+        if (evt.getClickCount() == 2) {
+
+            buttonGradient2.setEnabled(true);
+            buttonGradient3.setEnabled(true);
+
+            buttonGradient1.setEnabled(false);
+
+            int row = subjectTable.getSelectedRow();
+
+            subID = String.valueOf(subjectTable.getValueAt(row, 0));
+
+            subjectField.setText(String.valueOf(subjectTable.getValueAt(row, 1)));
+            jComboBox2.setSelectedItem(String.valueOf(subjectTable.getValueAt(row, 2)));
+
+        }
+    }//GEN-LAST:event_subjectTableMousePressed
+
+    private void buttonGradient2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonGradient2MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buttonGradient2MouseClicked
+
+    private void buttonGradient2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGradient2ActionPerformed
+
+        String subName = subjectField.getText();
+        int typeID = jComboBox2.getSelectedIndex();
+
+        try {
+
+            ResultSet chackrs = connection_ol.search("SELECT * FROM `subject` WHERE `subject_name` = '" + subName + "'");
+
+            if (subName.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please Enter Subject Name", "Warning", JOptionPane.WARNING_MESSAGE);
+            } else if (chackrs.next()) {
+                JOptionPane.showMessageDialog(this, "This Subject already accessed", "Warning", JOptionPane.WARNING_MESSAGE);
+            } else if (typeID == 0) {
+                JOptionPane.showMessageDialog(this, "Please Select Subject Name", "Warning", JOptionPane.WARNING_MESSAGE);
+            } else {
+
+                connection_ol.iud("UPDATE `subject` SET `subject_name` = '" + subName + "' , `subject_type_id` = "
+                        + "(SELECT `id` FROM `subject_type` WHERE `subject_type` = '" + String.valueOf(jComboBox2.getSelectedItem()) + "')"
+                        + " WHERE `subject_id` = '" + subID + "'");
+
+                inti();
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_buttonGradient2ActionPerformed
+
+    private void buttonGradient3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGradient3ActionPerformed
+        try {
+
+            connection_ol.iud("UPDATE `subject` SET `status_status_id` = '2'  WHERE `subject_id` = '" + subID + "'");
+
+            inti();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_buttonGradient3ActionPerformed
+
+    private void buttonGradient4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGradient4ActionPerformed
+        int calss = jComboBox3.getSelectedIndex();
+        int grade = jComboBox1.getSelectedIndex();
+
+        if (calss == 0) {
+            JOptionPane.showMessageDialog(this, "Please Select Class", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (grade == 0) {
+            JOptionPane.showMessageDialog(this, "Please Select Grade", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else {
+
+            try {
+
+                ResultSet chackRs = connection_ol.search("SELECT * FROM `class_has_grade` WHERE `class_class_id` = "
+                        + "(SELECT `class_id` FROM `class` WHERE `class_name` = '" + String.valueOf(jComboBox3.getSelectedItem()) + "') "
+                        + "AND `grade_grade_id` = (SELECT `grade_id` FROM `grade` WHERE `grade` = '" + String.valueOf(jComboBox1.getSelectedItem()) + "')");
+
+                if (!chackRs.next()) {
+
+                    connection_ol.iud("INSERT INTO `class_has_grade` (`class_class_id`,`grade_grade_id`) "
+                            + "VALUES ((SELECT `class_id` FROM `class` WHERE `class_name` = '" + String.valueOf(jComboBox3.getSelectedItem()) + "'),"
+                            + "(SELECT `grade_id` FROM `grade` WHERE `grade` = '" + String.valueOf(jComboBox1.getSelectedItem()) + "'))");
+
+                    inti();
+
+                } else {
+                    JOptionPane.showMessageDialog(this, "This Class already accessed", "Warning", JOptionPane.WARNING_MESSAGE);
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+    }//GEN-LAST:event_buttonGradient4ActionPerformed
+
+    private void class_tableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_class_tableMousePressed
+        if (evt.getClickCount() == 2) {
+
+            buttonGradient6.setEnabled(true);
+            buttonGradient4.setEnabled(false);
+
+            int row = class_table.getSelectedRow();
+
+            classID = String.valueOf(class_table.getValueAt(row, 0));
+
+            jComboBox3.setSelectedItem(String.valueOf(class_table.getValueAt(row, 2)));
+            jComboBox1.setSelectedItem(String.valueOf(class_table.getValueAt(row, 1)));
+        }
+    }//GEN-LAST:event_class_tableMousePressed
+
+    private void buttonGradient6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGradient6ActionPerformed
+        int calss = jComboBox3.getSelectedIndex();
+        int grade = jComboBox1.getSelectedIndex();
+
+        if (calss == 0) {
+            JOptionPane.showMessageDialog(this, "Please Select Class", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (grade == 0) {
+            JOptionPane.showMessageDialog(this, "Please Select Grade", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else {
+
+            try {
+
+                ResultSet chackRs = connection_ol.search("SELECT * FROM `class_has_grade` WHERE `class_class_id` = "
+                        + "(SELECT `class_id` FROM `class` WHERE `class_name` = '" + String.valueOf(jComboBox3.getSelectedItem()) + "') "
+                        + "AND `grade_grade_id` = (SELECT `grade_id` FROM `grade` WHERE `grade` = '" + String.valueOf(jComboBox1.getSelectedItem()) + "')");
+
+                if (!chackRs.next()) {
+
+                    connection_ol.iud("UPDATE `class_has_grade` SET "
+                            + "`class_class_id` = (SELECT `class_id` FROM `class` WHERE `class_name` = '" + String.valueOf(jComboBox3.getSelectedItem()) + "') , "
+                            + "`grade_grade_id` = (SELECT `grade_id` FROM `grade` WHERE `grade` = '" + String.valueOf(jComboBox1.getSelectedItem()) + "') "
+                            + "WHERE `class_has_grade_id` = '" + classID + "'");
+
+                    inti();
+
+                } else {
+                    JOptionPane.showMessageDialog(this, "This Class already accessed", "Warning", JOptionPane.WARNING_MESSAGE);
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+    }//GEN-LAST:event_buttonGradient6ActionPerformed
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private SMMV.Component.Background background1;
+    private SMMV.Component.Background background2;
+    private SMMV.Component.Background background4;
+    private SMMV.Component.Background background5;
+    private SMMV.Component.ButtonGradient buttonGradient1;
+    private SMMV.Component.ButtonGradient buttonGradient2;
+    private SMMV.Component.ButtonGradient buttonGradient3;
+    private SMMV.Component.ButtonGradient buttonGradient4;
+    private SMMV.Component.ButtonGradient buttonGradient6;
+    private javax.swing.JTable class_table;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JComboBox<String> jComboBox3;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextField subjectField;
+    private javax.swing.JTable subjectTable;
+    // End of variables declaration//GEN-END:variables
+}
