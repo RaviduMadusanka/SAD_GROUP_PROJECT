@@ -4,10 +4,14 @@
  */
 package SMMV.OL.gui;
 
+import SMMV.Connection.connection_ol;
 import SMMV.Main.Dashboard_ol;
 import SMMV.OL.form.Student;
 import java.util.HashMap;
 import java.util.Vector;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -18,17 +22,18 @@ public class OL_Subject extends javax.swing.JDialog {
 
     Dashboard_ol dashboard;
     Student student;
-//    private HashMap<String,String> olSubject = new HashMap<>();
-//
-//    public HashMap<String, String> getOlSubject() {
-//        return olSubject;
-//    }
-//
-//    public void setOlSubject(HashMap<String, String> olSubject) {
-//        this.olSubject = olSubject;
-//    }
-//    
-    
+        DefaultTableModel tablemodel;
+
+    String languageID;
+    String religionId;
+    String icategory;
+    String iicategory;
+    String iiicategory;
+    String englishId;
+    String mathsId;
+    String scienceId;
+    String historyId;
+
     /**
      * Creates new form OL_Subject
      */
@@ -37,6 +42,30 @@ public class OL_Subject extends javax.swing.JDialog {
         initComponents();
         dashboard = (Dashboard_ol) parent;
         this.student = student;
+        english.setSelected(true);
+        science.setSelected(true);
+        history.setSelected(true);
+        mathematics.setSelected(true);
+        tablemodel  = (DefaultTableModel) student.getOlTable().getModel();
+        tablemodel.setRowCount(0);
+    }
+
+    private void subjectName(String subjectId) {
+        try {
+            
+
+            Vector subjectVector = new Vector();
+            ResultSet rs = connection_ol.search("SELECT * FROM `subject` WHERE `subject_id`='" + subjectId + "'");
+
+            while (rs.next()) {
+
+                subjectVector.add(subjectId);
+                subjectVector.add(rs.getString("subject_name"));
+
+            }
+            tablemodel.addRow(subjectVector);
+        } catch (Exception e) {
+        }
     }
 
     /**
@@ -99,8 +128,14 @@ public class OL_Subject extends javax.swing.JDialog {
         economic = new javax.swing.JCheckBox();
         health = new javax.swing.JCheckBox();
         buttonGradient4 = new SMMV.Component.ButtonGradient();
+        buttonGradient5 = new SMMV.Component.ButtonGradient();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         jLabel27.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel27.setText("Select Grade 10 & 11 Subject");
@@ -478,6 +513,8 @@ public class OL_Subject extends javax.swing.JDialog {
         geogra.setActionCommand("12");
         entrepreneurship.setActionCommand("23");
         second.setActionCommand("24");
+        secont2.setActionCommand("26");
+        pali.setActionCommand("25");
         sanskrit.setActionCommand("27");
         french.setActionCommand("28");
         germen.setActionCommand("29");
@@ -504,6 +541,16 @@ public class OL_Subject extends javax.swing.JDialog {
             }
         });
 
+        buttonGradient5.setText("Cancel");
+        buttonGradient5.setColor1(new java.awt.Color(0, 0, 204));
+        buttonGradient5.setColor2(new java.awt.Color(139, 139, 252));
+        buttonGradient5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        buttonGradient5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonGradient5ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout background1Layout = new javax.swing.GroupLayout(background1);
         background1.setLayout(background1Layout);
         background1Layout.setHorizontalGroup(
@@ -522,7 +569,9 @@ public class OL_Subject extends javax.swing.JDialog {
                             .addGroup(background1Layout.createSequentialGroup()
                                 .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(buttonGradient4, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(buttonGradient5, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(buttonGradient4, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 736, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(16, 16, 16))
@@ -533,7 +582,8 @@ public class OL_Subject extends javax.swing.JDialog {
                 .addGap(9, 9, 9)
                 .addGroup(background1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonGradient4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(buttonGradient4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonGradient5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -570,16 +620,16 @@ public class OL_Subject extends javax.swing.JDialog {
         boolean maths_check = mathematics.isSelected();
         boolean science_check = science.isSelected();
         boolean history_check = history.isSelected();
-        
+
         boolean sinhala_check = sinhala.isSelected();
         boolean tamil_check = tamil.isSelected();
-        
+
         boolean buddism_check = buddist.isSelected();
         boolean christianity_check = christianity.isSelected();
         boolean saivanery_check = saivanery.isSelected();
         boolean catalic_check = catholicm.isSelected();
         boolean islam_check = islam.isSelected();
-        
+
         //I Category
         boolean business_check = bussness.isSelected();
         boolean civic_check = civic.isSelected();
@@ -593,7 +643,7 @@ public class OL_Subject extends javax.swing.JDialog {
         boolean german_check = germen.isSelected();
         boolean japan_check = japan.isSelected();
         boolean korean_check = karean.isSelected();
-        
+
         //II Catrgory
         boolean musicO_check = musico.isSelected();
         boolean musicW_check = musicw.isSelected();
@@ -602,47 +652,69 @@ public class OL_Subject extends javax.swing.JDialog {
         boolean aosinhala_check = aosinhala.isSelected();
         boolean drama_check = drama.isSelected();
         boolean art_check = art.isSelected();
-        
+
         //III Category
         boolean ict_check = ict.isSelected();
         boolean home_check = economic.isSelected();
         boolean health_check = health.isSelected();
-        
-        if(!english_check){
-            System.out.println("1");
-        }else if(!maths_check){
-            System.out.println("2");
-        }else if(!history_check){
-            System.out.println("3");
-        }else if(!science_check){
-            System.out.println("4");
-        }else if(!sinhala_check && !tamil_check){
-            System.out.println("5");
-        }else if(!buddism_check && !christianity_check && !catalic_check && !saivanery_check && !islam_check){
-            System.out.println("6");
-        }else if(!business_check && !civic_check && !geography_check && !entership_check && !secondS_check 
-                && !secondT_check && !pali_check && !sanskrit_check && !french_check && !german_check 
-                && !japan_check && !korean_check){
-            System.out.println("7");
-        }else if(!musicO_check && !musicW_check && !danceO_check && !danceB_check && !aosinhala_check && !drama_check && !art_check){
-            System.out.println("8");
-        }else if(!ict_check && !home_check && !health_check){
-            System.out.println("9");
-        }else {
-            
-            String languageID = buttonGroup1.getSelection().getActionCommand();
-            String religionId = buttonGroup2.getSelection().getActionCommand();
-            String icategory = buttonGroup3.getSelection().getActionCommand();
-            String iicategory = buttonGroup4.getSelection().getActionCommand();
-            String iiicategory = buttonGroup5.getSelection().getActionCommand();
-            
-            Student student = new Student();
-            
-                
+
+        if (!english_check) {
+            JOptionPane.showMessageDialog(this, "Please Select English Subject", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (!maths_check) {
+            JOptionPane.showMessageDialog(this, "Please Select Mathematics Subject", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (!history_check) {
+            JOptionPane.showMessageDialog(this, "Please Select History Subject", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (!science_check) {
+            JOptionPane.showMessageDialog(this, "Please Select Science Subject", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (!sinhala_check && !tamil_check) {
+            JOptionPane.showMessageDialog(this, "Please Select Language & Literature Subject", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (!buddism_check && !christianity_check && !catalic_check && !saivanery_check && !islam_check) {
+            JOptionPane.showMessageDialog(this, "Please Select Religion Subject", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (!business_check && !civic_check && !geography_check && !entership_check && !secondS_check
+                && !secondT_check && !pali_check && !sanskrit_check && !french_check && !german_check
+                && !japan_check && !korean_check) {
+            JOptionPane.showMessageDialog(this, "Please Select First Category Subject", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (!musicO_check && !musicW_check && !danceO_check && !danceB_check && !aosinhala_check && !drama_check && !art_check) {
+           JOptionPane.showMessageDialog(this, "Please Select Second Category Subject", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (!ict_check && !home_check && !health_check) {
+            JOptionPane.showMessageDialog(this, "Please Select Thurd Category Subject", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else {
+
+            languageID = buttonGroup1.getSelection().getActionCommand();
+            religionId = buttonGroup2.getSelection().getActionCommand();
+            icategory = buttonGroup3.getSelection().getActionCommand();
+            iicategory = buttonGroup4.getSelection().getActionCommand();
+            iiicategory = buttonGroup5.getSelection().getActionCommand();
+            englishId = english.getActionCommand();
+            mathsId = mathematics.getActionCommand();
+            scienceId = science.getActionCommand();
+            historyId = history.getActionCommand();
+
             this.dispose();
-            
+
         }
     }//GEN-LAST:event_buttonGradient4ActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+
+        subjectName(englishId);
+        subjectName(mathsId);
+        subjectName(scienceId);
+        subjectName(historyId);
+        subjectName(languageID);
+        subjectName(religionId);
+        subjectName(icategory);
+        subjectName(iicategory);
+        subjectName(iiicategory);
+
+    }//GEN-LAST:event_formWindowClosed
+
+    private void buttonGradient5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGradient5ActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) student.getOlTable().getModel();
+        model.setRowCount(0);
+        this.dispose();
+    }//GEN-LAST:event_buttonGradient5ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -655,6 +727,7 @@ public class OL_Subject extends javax.swing.JDialog {
     private javax.swing.JCheckBox buddist;
     private javax.swing.JCheckBox bussness;
     private SMMV.Component.ButtonGradient buttonGradient4;
+    private SMMV.Component.ButtonGradient buttonGradient5;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.ButtonGroup buttonGroup3;
