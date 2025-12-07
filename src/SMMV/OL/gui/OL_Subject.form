@@ -20,6 +20,9 @@
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
     <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
+  <Events>
+    <EventHandler event="windowClosed" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowClosed"/>
+  </Events>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
@@ -69,7 +72,9 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel27" min="-2" pref="204" max="-2" attributes="0"/>
                                   <EmptySpace max="32767" attributes="0"/>
-                                  <Component id="buttonGradient4" min="-2" pref="262" max="-2" attributes="0"/>
+                                  <Component id="buttonGradient5" min="-2" pref="177" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Component id="buttonGradient4" min="-2" pref="177" max="-2" attributes="0"/>
                               </Group>
                               <Component id="jSeparator1" min="-2" pref="736" max="-2" attributes="0"/>
                           </Group>
@@ -87,6 +92,7 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel27" alignment="3" min="-2" pref="19" max="-2" attributes="0"/>
                       <Component id="buttonGradient4" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="buttonGradient5" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
@@ -660,6 +666,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Second Language (Tamil)"/>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="secont2.setActionCommand(&quot;26&quot;);"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="pali">
               <Properties>
@@ -671,6 +680,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Pali"/>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="pali.setActionCommand(&quot;25&quot;);"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="sanskrit">
               <Properties>
@@ -921,6 +933,23 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonGradient4ActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="SMMV.Component.ButtonGradient" name="buttonGradient5">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Cancel"/>
+            <Property name="color1" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="cc" green="0" red="0" type="rgb"/>
+            </Property>
+            <Property name="color2" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="fc" green="8b" red="8b" type="rgb"/>
+            </Property>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="14" style="1"/>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonGradient5ActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

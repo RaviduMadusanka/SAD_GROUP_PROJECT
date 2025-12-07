@@ -37,10 +37,9 @@ public class Student extends javax.swing.JPanel {
     public void setOlTable(JTable olTable) {
         this.olTable = olTable;
     }
-    
-    
 
-   private Dashboard_ol dashboard;
+    private Dashboard_ol dashboard;
+
     /**
      * Creates new form Student
      */
@@ -108,27 +107,6 @@ public class Student extends javax.swing.JPanel {
             System.out.println(e);
         }
     }
-
-//    private void loadOtherSubject() {
-//        try {
-//            Vector classVector = new Vector();
-//            classVector.add("Select Other Subject");
-//
-//            ResultSet otherSubjectRs = connection_ol.search("SELECT * FROM `subject` WHERE `subject_type_id`='2'");
-//
-//            while (otherSubjectRs.next()) {
-//
-//                classVector.add(otherSubjectRs.getString("subject_name"));
-//                other_subject_map.put(otherSubjectRs.getString("subject_name"), otherSubjectRs.getString("subject_id"));
-//            }
-//
-//            other_subject_combo.setModel(new DefaultComboBoxModel<>(classVector));
-//        } catch (java.sql.SQLException e) {
-////                        SignIn.logger.warning(e.getMessage());
-//            System.out.println(e);
-//        }
-//    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -1040,6 +1018,7 @@ public class Student extends javax.swing.JPanel {
 
                                     JOptionPane.showMessageDialog(this, "Please Select Important Subject!", "Warning", JOptionPane.WARNING_MESSAGE);
                                 } else {
+
                                     //Subject Add
                                     if (sinhala.isSelected()) {
                                         subjectAdd(sinhala.getText(), index_number);
@@ -1090,16 +1069,24 @@ public class Student extends javax.swing.JPanel {
                                         subjectAdd(art.getText(), index_number);
                                     }
 
-//                                    for (int i = 0; i < 3; i++) {
-//                                        String otherSubjectId = String.valueOf(other_subject_table.getValueAt(i, 0));
-//                                        connection_ol.iud("INSERT INTO `student_has_subject` (`subject_subject_id`,`student_student_id`) "
-//                                                + "VALUES ('" + otherSubjectId + "','" + index_number + "')");
-//                                    }
+                                    if (grade.equals("10") | grade.equals("11")) {
+                                        for (int i = 0; i < 9; i++) {
+                                            String olSubjectId = String.valueOf(olTable.getValueAt(i, 0));
+                                            ResultSet olSubjectRs = connection_ol.search("SELECT * FROM `category_subjects` WHERE `subject_id`='" + olSubjectId + "'");
+                                            if(olSubjectRs.next()){
+                                                String category_id = olSubjectRs.getString("category_subjects_id");
+                                                connection_ol.iud("INSERT INTO `student_for_category_subject` (`student_student_id`,`category_subjects_category_subjects_id`) "
+                                                    + "VALUES ('" + index_number + "','" + category_id + "')");
+                                            }
+                                            connection_ol.iud("INSERT INTO `student_has_subject` (`subject_subject_id`,`student_student_id`) "
+                                                    + "VALUES ('" + olSubjectId + "','" + index_number + "')");
+                                        }
+                                    }
 
                                     connection_ol.iud("INSERT INTO `address` (`line_1`,`line_2`,`student_student_id`) "
                                             + "VALUES ('" + line1 + "','" + line2 + "','" + index_number + "')");
 
-                                    JOptionPane.showMessageDialog(this, "New Student Added Successfully", "Success", JOptionPane.OK_OPTION);
+                                    JOptionPane.showMessageDialog(this, "New Student Added Successfully", "Success", JOptionPane.DEFAULT_OPTION);
 
                                 }
 
@@ -1125,7 +1112,7 @@ public class Student extends javax.swing.JPanel {
 
     private void gradeComboItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_gradeComboItemStateChanged
         String grade = String.valueOf(gradeCombo.getSelectedItem());
-        if(grade.equals("10") | grade.equals("11")){
+        if (grade.equals("10") | grade.equals("11")) {
             sinhala.setEnabled(false);
             english.setEnabled(false);
             maths.setEnabled(false);
@@ -1142,9 +1129,9 @@ public class Student extends javax.swing.JPanel {
             dance.setEnabled(false);
             drama.setEnabled(false);
             art.setEnabled(false);
-             ol_subject_button.setEnabled(true);
-        }else{
-            
+            ol_subject_button.setEnabled(true);
+        } else {
+
             ol_subject_button.setEnabled(false);
             sinhala.setEnabled(true);
             english.setEnabled(true);
