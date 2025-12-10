@@ -39,7 +39,8 @@ public class Employee extends javax.swing.JPanel {
     }
 
     private void inti() {
-        fname_field.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter Username");
+        fname_field.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter Fast Name");
+        lname_field.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter Last Name");
         email_field.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter Email Address");
         mobile_field.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter Mobile");
         password_filed.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter Password");
@@ -87,7 +88,7 @@ public class Employee extends javax.swing.JPanel {
     }
 
     private void loadEmployeeTable() {
-        
+
         try {
 
             ResultSet rs = connection_ol.search("SELECT * FROM `admin` INNER JOIN `status` ON `admin`.`status_status_id` = `status`.`status_id` "
@@ -502,23 +503,22 @@ public class Employee extends javax.swing.JPanel {
             }
 
             try {
-                
-                ResultSet rs = connection_ol.search("SELECT * FROM `admin` WHERE `email`='"+email_field.getText()+"' OR `mobile`='"+mobile_field.getText()+"'");
-                
-                if(rs.next()){
+
+                ResultSet rs = connection_ol.search("SELECT * FROM `admin` WHERE `email`='" + email_field.getText() + "' OR `mobile`='" + mobile_field.getText() + "'");
+
+                if (rs.next()) {
                     JOptionPane.showMessageDialog(this, "Email or Mobile Already Use!", "Warning", JOptionPane.WARNING_MESSAGE);
                     clear();
-                }else{
+                } else {
                     connection_ol.iud("INSERT INTO `admin` (`admin_id`,`fast_name`,`last_name`,`email`,`password`,`mobile`,`user_type_user_type_id`,`status_status_id`,`gender_gender_id`) "
-                        + "VALUES ('" + User_id_Genarator.User_id_Genarator() + "','" + fname_field.getText() + "','" + lname_field.getText() + "','" + email_field.getText() + "','" + password_filed.getPassword() + "',"
-                        + "'" + mobile_field.getText() + "','" + user_type_map.get(user_type) + "','1','" + genser + "')");
+                            + "VALUES ('" + User_id_Genarator.User_id_Genarator() + "','" + fname_field.getText() + "','" + lname_field.getText() + "','" + email_field.getText() + "','" + password_filed.getPassword() + "',"
+                            + "'" + mobile_field.getText() + "','" + user_type_map.get(user_type) + "','1','" + genser + "')");
 
-                System.out.println("Success");
-                loadEmployeeTable();
-                clear();
+                    clear();
+                    loadEmployeeTable();
+
+                    JOptionPane.showMessageDialog(this, "Teacher Insert Success.", "Success", JOptionPane.OK_OPTION);
                 }
-
-                
 
             } catch (Exception e) {
                 System.out.println(e);
@@ -583,15 +583,15 @@ public class Employee extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Please Select Employee to update or remove", "Warning", JOptionPane.WARNING_MESSAGE);
         } else {
             try {
-                
-                if(status.equals("1")){
+
+                if (status.equals("1")) {
                     connection_ol.iud("UPDATE `admin` SET `status_status_id`='2' WHERE  `admin_id`='" + EID + "'");
-                JOptionPane.showMessageDialog(this, "This Employee Deactivate.", "Success", JOptionPane.WARNING_MESSAGE);
-                }else{
+                    JOptionPane.showMessageDialog(this, "This Employee Deactivate.", "Success", JOptionPane.WARNING_MESSAGE);
+                } else {
                     connection_ol.iud("UPDATE `admin` SET `status_status_id`='1' WHERE  `admin_id`='" + EID + "'");
-                JOptionPane.showMessageDialog(this, "Now This Employee Activa.", "Success", JOptionPane.OK_OPTION);
+                    JOptionPane.showMessageDialog(this, "Now This Employee Activa.", "Success", JOptionPane.OK_OPTION);
                 }
-                
+
                 clear();
                 loadEmployeeTable();
 
@@ -634,11 +634,11 @@ public class Employee extends javax.swing.JPanel {
                     } else if (String.valueOf(employee_table.getValueAt(row, 7)).equals("Female")) {
                         female.setSelected(true);
                     }
-                    
-                    if(String.valueOf(employee_table.getValueAt(row, 8)).equals("ACTIVE")){
+
+                    if (String.valueOf(employee_table.getValueAt(row, 8)).equals("ACTIVE")) {
                         buttonGradient3.setText("Deactive");
                         status = "1";
-                    }else{
+                    } else {
                         status = "2";
                         buttonGradient3.setText("Active");
                     }
@@ -652,9 +652,9 @@ public class Employee extends javax.swing.JPanel {
     }//GEN-LAST:event_employee_tableMouseClicked
 
     private void search_fieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_search_fieldKeyPressed
-       
+
         String search = search_field.getText();
-        
+
         try {
             ResultSet rs = connection_ol.search("SELECT * FROM `admin` INNER JOIN `user_type` ON `admin`.`user_type_user_type_id`=`user_type`.`user_type_id` "
                     + "INNER JOIN `gender` ON `admin`.`gender_gender_id`=`gender`.`gender_id` "
@@ -663,7 +663,7 @@ public class Employee extends javax.swing.JPanel {
 
             DefaultTableModel model = (DefaultTableModel) employee_table.getModel();
             model.setRowCount(0);
-            
+
             while (rs.next()) {
                 Vector employeeVector = new Vector();
                 employeeVector.add(rs.getString("admin_id"));

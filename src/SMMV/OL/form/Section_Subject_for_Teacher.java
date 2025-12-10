@@ -4,17 +4,172 @@
  */
 package SMMV.OL.form;
 
+import SMMV.Connection.connection_ol;
+import java.sql.ResultSet;
+import java.util.HashMap;
+import java.util.Vector;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author user
  */
 public class Section_Subject_for_Teacher extends javax.swing.JPanel {
 
+    HashMap<String, String> teacherMap = new HashMap<>();
+    String rowName1 = "";
+    String rowName2 = "";
+
     /**
      * Creates new form Section_Subject_for_Teacher
      */
     public Section_Subject_for_Teacher() {
         initComponents();
+        init();
+        loadTables();
+    }
+
+    public void init() {
+
+        jComboBox1.setEnabled(true);
+        jComboBox3.setEnabled(true);
+
+        buttonGradient1.setEnabled(true);
+        buttonGradient2.setEnabled(false);
+        buttonGradient3.setEnabled(false);
+
+        buttonGradient8.setEnabled(true);
+        buttonGradient9.setEnabled(false);
+        buttonGradient10.setEnabled(false);
+
+        try {
+            Vector user_typeVector = new Vector();
+            user_typeVector.add("Select Teacher...");
+
+            ResultSet user_typeResult = connection_ol.search("SELECT * FROM `teacher` WHERE `status_status_id` = '1'");
+
+            while (user_typeResult.next()) {
+
+                ResultSet rs2 = connection_ol.search("SELECT * FROM `section_teacher` WHERE `teacher_teacher_id` = '" + user_typeResult.getString("teacher_id") + "'");
+
+                if (!rs2.next()) {
+                    user_typeVector.add(user_typeResult.getString("first_name") + " " + user_typeResult.getString("last_name"));
+                }
+
+                teacherMap.put(user_typeResult.getString("first_name") + " " + user_typeResult.getString("last_name"), user_typeResult.getString("teacher_id"));
+
+            }
+
+            jComboBox1.setModel(new DefaultComboBoxModel<>(user_typeVector));
+
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Vector user_typeVector = new Vector();
+            user_typeVector.add("Select Teacher...");
+
+            ResultSet user_typeResult = connection_ol.search("SELECT * FROM `teacher` WHERE `status_status_id` = '1'");
+
+            while (user_typeResult.next()) {
+
+                ResultSet rs2 = connection_ol.search("SELECT * FROM `subject_has_teacher` WHERE `teacher_teacher_id` = '" + user_typeResult.getString("teacher_id") + "'");
+
+                if (!rs2.next()) {
+                    user_typeVector.add(user_typeResult.getString("first_name") + " " + user_typeResult.getString("last_name"));
+                }
+
+                teacherMap.put(user_typeResult.getString("first_name") + " " + user_typeResult.getString("last_name"), user_typeResult.getString("teacher_id"));
+
+            }
+
+            getjComboBox3().setModel(new DefaultComboBoxModel<>(user_typeVector));
+
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Vector user_typeVector = new Vector();
+            user_typeVector.add("Select Grade...");
+
+            ResultSet subRS = connection_ol.search("SELECT * FROM `grade`");
+
+            while (subRS.next()) {
+                user_typeVector.add(subRS.getString("grade"));
+            }
+
+            jComboBox2.setModel(new DefaultComboBoxModel<>(user_typeVector));
+
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Vector user_typeVector = new Vector();
+            user_typeVector.add("Select Subject...");
+
+            ResultSet subRS = connection_ol.search("SELECT * FROM `subject`");
+
+            while (subRS.next()) {
+                user_typeVector.add(subRS.getString("subject_name"));
+            }
+
+            jComboBox4.setModel(new DefaultComboBoxModel<>(user_typeVector));
+
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void loadTables() {
+
+        try {
+
+            ResultSet rs = connection_ol.search("SELECT * FROM `section_teacher` INNER JOIN `teacher` ON `section_teacher`.`teacher_teacher_id` = `teacher`.`teacher_id` "
+                    + "INNER JOIN `grade` ON `section_teacher`.`grade_grade_id` = `grade`.`grade_id`");
+
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            model.setRowCount(0);
+
+            while (rs.next()) {
+                Vector employeeVector = new Vector();
+                employeeVector.add(rs.getString("section_teacher_id"));
+                employeeVector.add(rs.getString("first_name") + " " + rs.getString("last_name"));
+                employeeVector.add(rs.getString("grade.grade"));
+
+                model.addRow(employeeVector);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+
+            ResultSet rs = connection_ol.search("SELECT * FROM `subject_has_teacher` INNER JOIN `teacher` ON `subject_has_teacher`.`teacher_teacher_id` = `teacher`.`teacher_id` "
+                    + "INNER JOIN `subject` ON `subject_has_teacher`.`subject_subject_id` = `subject`.`subject_id`");
+
+            DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+            model.setRowCount(0);
+
+            while (rs.next()) {
+                Vector employeeVector = new Vector();
+                employeeVector.add(rs.getString("subject_has_teacher_id"));
+                employeeVector.add(rs.getString("first_name") + " " + rs.getString("last_name"));
+                employeeVector.add(rs.getString("subject.subject_name"));
+
+                model.addRow(employeeVector);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -90,11 +245,21 @@ public class Section_Subject_for_Teacher extends javax.swing.JPanel {
         buttonGradient1.setColor1(new java.awt.Color(0, 0, 153));
         buttonGradient1.setColor2(new java.awt.Color(139, 139, 252));
         buttonGradient1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        buttonGradient1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonGradient1ActionPerformed(evt);
+            }
+        });
 
         buttonGradient2.setText("Update ");
         buttonGradient2.setColor1(new java.awt.Color(0, 0, 153));
         buttonGradient2.setColor2(new java.awt.Color(139, 139, 252));
         buttonGradient2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        buttonGradient2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonGradient2ActionPerformed(evt);
+            }
+        });
 
         buttonGradient3.setText("Delete ");
         buttonGradient3.setColor1(new java.awt.Color(0, 0, 153));
@@ -120,9 +285,14 @@ public class Section_Subject_for_Teacher extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTable1MousePressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
-        jComboBox1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jComboBox2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -237,11 +407,21 @@ public class Section_Subject_for_Teacher extends javax.swing.JPanel {
         buttonGradient8.setColor1(new java.awt.Color(0, 0, 153));
         buttonGradient8.setColor2(new java.awt.Color(139, 139, 252));
         buttonGradient8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        buttonGradient8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonGradient8ActionPerformed(evt);
+            }
+        });
 
         buttonGradient9.setText("Update ");
         buttonGradient9.setColor1(new java.awt.Color(0, 0, 153));
         buttonGradient9.setColor2(new java.awt.Color(139, 139, 252));
         buttonGradient9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        buttonGradient9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonGradient9ActionPerformed(evt);
+            }
+        });
 
         buttonGradient10.setText("Delete ");
         buttonGradient10.setColor1(new java.awt.Color(0, 0, 153));
@@ -267,12 +447,17 @@ public class Section_Subject_for_Teacher extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTable2MousePressed(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTable2);
 
         jComboBox3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jComboBox4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jComboBox4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel16.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -368,6 +553,159 @@ public class Section_Subject_for_Teacher extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void buttonGradient1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGradient1ActionPerformed
+        String tName = jComboBox1.getSelectedItem().toString();
+        String grade = jComboBox2.getSelectedItem().toString();
+
+        if (jComboBox1.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(this, "Please Select Teacher", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (jComboBox2.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(this, "Please Select Grade", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else {
+
+            String tID = teacherMap.get(tName);
+
+            try {
+
+                ResultSet test = connection_ol.search("SELECT * FROM `section_teacher` WHERE `teacher_teacher_id` = '" + tID + "' "
+                        + "AND `grade_grade_id` = (SELECT `grade_id` FROM `grade` WHERE `grade` = '" + grade + "')");
+
+                if (test.next()) {
+                    JOptionPane.showMessageDialog(this, "Sumthing was Rang.", "Warning", JOptionPane.WARNING_MESSAGE);
+                } else {
+
+                    connection_ol.iud("INSERT INTO `section_teacher` (`grade_grade_id`,`teacher_teacher_id`) "
+                            + "VALUES ((SELECT `grade_id` FROM `grade` WHERE `grade` = '" + grade + "'),'" + tID + "')");
+
+                    JOptionPane.showMessageDialog(this, "Added Success", "Success", JOptionPane.OK_OPTION);
+
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+    }//GEN-LAST:event_buttonGradient1ActionPerformed
+
+    private void buttonGradient8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGradient8ActionPerformed
+        String tName = jComboBox3.getSelectedItem().toString();
+        String subName = jComboBox4.getSelectedItem().toString();
+
+        if (jComboBox3.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(this, "Please Select Teacher", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (jComboBox4.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(this, "Please Select Subject", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else {
+
+            String tID = teacherMap.get(tName);
+
+            try {
+
+                ResultSet test = connection_ol.search("SELECT * FROM `subject_has_teacher` WHERE `teacher_teacher_id` = '" + tID + "' "
+                        + "AND `subject_subject_id` = (SELECT `subject_id` FROM `subject` WHERE `subject_name` = '" + subName + "')");
+
+                if (test.next()) {
+                    JOptionPane.showMessageDialog(this, "Sumthing was Rang.", "Warning", JOptionPane.WARNING_MESSAGE);
+                } else {
+
+                    connection_ol.iud("INSERT INTO `subject_has_teacher` (`subject_subject_id`,`teacher_teacher_id`) "
+                            + "VALUES ((SELECT `subject_id` FROM `subject` WHERE `subject_name` = '" + subName + "'),'" + tID + "')");
+
+                    JOptionPane.showMessageDialog(this, "Added Success", "Success", JOptionPane.OK_OPTION);
+
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+    }//GEN-LAST:event_buttonGradient8ActionPerformed
+
+    private void jTable1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MousePressed
+        if (evt.getClickCount() == 2) {
+
+            jComboBox1.setEnabled(false);
+
+            buttonGradient1.setEnabled(false);
+            buttonGradient2.setEnabled(true);
+            buttonGradient3.setEnabled(true);
+
+            int row = jTable1.getSelectedRow();
+
+            rowName1 = String.valueOf(jTable1.getValueAt(row, 0));
+
+            jComboBox2.setSelectedItem(String.valueOf(jTable1.getValueAt(row, 2)));
+
+        }
+
+
+    }//GEN-LAST:event_jTable1MousePressed
+
+    private void jTable2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MousePressed
+        if (evt.getClickCount() == 2) {
+
+            jComboBox3.setEnabled(false);
+
+            buttonGradient8.setEnabled(false);
+            buttonGradient9.setEnabled(true);
+            buttonGradient10.setEnabled(true);
+
+            int row = jTable2.getSelectedRow();
+
+            rowName2 = String.valueOf(jTable1.getValueAt(row, 0));
+
+            jComboBox4.setSelectedItem(String.valueOf(jTable2.getValueAt(row, 2)));
+
+        }
+    }//GEN-LAST:event_jTable2MousePressed
+
+    private void buttonGradient2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGradient2ActionPerformed
+        if (jComboBox2.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(this, "Please Select Grade", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else {
+
+            String grade = jComboBox2.getSelectedItem().toString();
+
+            try {
+
+                connection_ol.iud("UPDATE `section_teacher` SET `grade_grade_id` = (SELECT `grade_id` FROM `grade` WHERE `grade` = '" + grade + "') "
+                        + "WHERE `section_teacher_id` = '" + rowName1 + "'");
+
+                init();
+                loadTables();
+                JOptionPane.showMessageDialog(this, "Update Success", "Success", JOptionPane.OK_OPTION);
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+    }//GEN-LAST:event_buttonGradient2ActionPerformed
+
+    private void buttonGradient9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGradient9ActionPerformed
+        if (jComboBox4.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(this, "Please Select Subject", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else {
+
+            String subject = jComboBox4.getSelectedItem().toString();
+
+            try {
+
+                connection_ol.iud("UPDATE `subject_has_teacher` SET `subject_subject_id` = (SELECT `subject_id` FROM `subject` WHERE `subject_name` = '" + subject + "') "
+                        + "WHERE `subject_has_teacher_id` = '" + rowName2 + "'");
+
+                init();
+                loadTables();
+                JOptionPane.showMessageDialog(this, "Update Success", "Success", JOptionPane.OK_OPTION);
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_buttonGradient9ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private SMMV.Component.Background background2;
@@ -401,4 +739,25 @@ public class Section_Subject_for_Teacher extends javax.swing.JPanel {
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     // End of variables declaration//GEN-END:variables
+
+    /**
+     * @return the jComboBox2
+     */
+    public javax.swing.JComboBox<String> getjComboBox2() {
+        return jComboBox2;
+    }
+
+    /**
+     * @return the jComboBox3
+     */
+    public javax.swing.JComboBox<String> getjComboBox3() {
+        return jComboBox3;
+    }
+
+    /**
+     * @param jComboBox3 the jComboBox3 to set
+     */
+    public void setjComboBox3(javax.swing.JComboBox<String> jComboBox3) {
+        this.jComboBox3 = jComboBox3;
+    }
 }
