@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Vector;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -34,6 +35,18 @@ public class OL_Subject extends javax.swing.JDialog {
     String scienceId;
     String historyId;
 
+    public JCheckBox getEnglish() {
+        return english;
+    }
+
+    public void setEnglish(JCheckBox english) {
+        this.english = english;
+    }
+    
+    
+    
+    
+
     /**
      * Creates new form OL_Subject
      */
@@ -42,14 +55,16 @@ public class OL_Subject extends javax.swing.JDialog {
         initComponents();
         dashboard = (Dashboard_ol) parent;
         this.student = student;
-        english.setSelected(true);
-        science.setSelected(true);
-        history.setSelected(true);
-        mathematics.setSelected(true);
+//        english.setSelected(true);
+//        science.setSelected(true);
+//        history.setSelected(true);
+//        mathematics.setSelected(true);
         tablemodel  = (DefaultTableModel) student.getOlTable().getModel();
         tablemodel.setRowCount(0);
     }
 
+
+    
     private void subjectName(String subjectId) {
         try {
             
