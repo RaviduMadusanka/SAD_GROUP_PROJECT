@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Vector;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -35,18 +36,137 @@ public class OL_Subject extends javax.swing.JDialog {
     String scienceId;
     String historyId;
 
+    public JCheckBox getAosinhala() {
+        return aosinhala;
+    }
+
+    public JCheckBox getArt() {
+        return art;
+    }
+
+    public JCheckBox getBuddist() {
+        return buddist;
+    }
+
+    public JCheckBox getBussness() {
+        return bussness;
+    }
+
+    public JCheckBox getCatholicm() {
+        return catholicm;
+    }
+
+    public JCheckBox getChristianity() {
+        return christianity;
+    }
+
+    public JCheckBox getCivic() {
+        return civic;
+    }
+
+    public JCheckBox getDanceb() {
+        return danceb;
+    }
+
+    public JCheckBox getDanceo() {
+        return danceo;
+    }
+
+    public JCheckBox getDrama() {
+        return drama;
+    }
+
+    public JCheckBox getEconomic() {
+        return economic;
+    }
+
+    public JCheckBox getEntrepreneurship() {
+        return entrepreneurship;
+    }
+
+    public JCheckBox getFrench() {
+        return french;
+    }
+
+    public JCheckBox getGeogra() {
+        return geogra;
+    }
+
+    public JCheckBox getGermen() {
+        return germen;
+    }
+
+    public JCheckBox getHealth() {
+        return health;
+    }
+
+    public JCheckBox getIct() {
+        return ict;
+    }
+
+    public JCheckBox getIslam() {
+        return islam;
+    }
+
+    public JCheckBox getJapan() {
+        return japan;
+    }
+
+    public JCheckBox getKarean() {
+        return karean;
+    }
+
+    public JCheckBox getMusico() {
+        return musico;
+    }
+
+    public JCheckBox getMusicw() {
+        return musicw;
+    }
+
+    public JCheckBox getPali() {
+        return pali;
+    }
+
+    public JCheckBox getSaivanery() {
+        return saivanery;
+    }
+
+    public JCheckBox getSanskrit() {
+        return sanskrit;
+    }
+
+    public JCheckBox getSecond() {
+        return second;
+    }
+
+    public JCheckBox getSecont2() {
+        return secont2;
+    }
+
+    public JCheckBox getSinhala() {
+        return sinhala;
+    }
+
+    public JCheckBox getTamil() {
+        return tamil;
+    }
+
     public JCheckBox getEnglish() {
         return english;
     }
 
-    public void setEnglish(JCheckBox english) {
-        this.english = english;
+    public JCheckBox getHistory() {
+        return history;
     }
-    
-    
-    
-    
 
+    public JCheckBox getMathematics() {
+        return mathematics;
+    }
+
+    public JCheckBox getScience() {
+        return science;
+    }
     /**
      * Creates new form OL_Subject
      */
@@ -55,10 +175,10 @@ public class OL_Subject extends javax.swing.JDialog {
         initComponents();
         dashboard = (Dashboard_ol) parent;
         this.student = student;
-//        english.setSelected(true);
-//        science.setSelected(true);
-//        history.setSelected(true);
-//        mathematics.setSelected(true);
+        english.setSelected(true);
+        science.setSelected(true);
+        history.setSelected(true);
+        mathematics.setSelected(true);
         tablemodel  = (DefaultTableModel) student.getOlTable().getModel();
         tablemodel.setRowCount(0);
     }

@@ -25,22 +25,23 @@ import javax.swing.table.JTableHeader;
  * @author user
  */
 public class Student extends javax.swing.JPanel {
-    
-    
+
     HashMap<String, String> grade_map = new HashMap<>();
     HashMap<String, String> class_map = new HashMap<>();
 //    HashMap<String, String> other_subject_map = new HashMap<>();
 //    HashMap<String, OtherSubject> otherSubjectHashMap = new HashMap<>();
     String index_number = "";
-    
+    String primaryArtId = "";
+    String nomalGradeSubject;
+
     public JTable getOlTable() {
         return olTable;
     }
-    
+
     public void setOlTable(JTable olTable) {
         this.olTable = olTable;
     }
-    
+
     private Dashboard_ol dashboard;
 
     /**
@@ -57,7 +58,7 @@ public class Student extends javax.swing.JPanel {
         loadClass();
         loadStudentTable();
     }
-    
+
     private void clear() {
         enrollment_no_field.setText("");
         fname_field.setText("");
@@ -114,51 +115,51 @@ public class Student extends javax.swing.JPanel {
         line1_field.setText("");
         line2_field.setText("");
         gradeCombo.setSelectedIndex(0);
-        
+
     }
-    
+
     private void loadGrade() {
         try {
             Vector gradeVector = new Vector();
             gradeVector.add("Select Grade");
-            
+
             ResultSet gradeRs = connection_ol.search("SELECT * FROM `grade`");
-            
+
             while (gradeRs.next()) {
-                
+
                 gradeVector.add(gradeRs.getString("grade"));
                 grade_map.put(gradeRs.getString("grade"), gradeRs.getString("grade_id"));
             }
-            
+
             gradeCombo.setModel(new DefaultComboBoxModel<>(gradeVector));
         } catch (java.sql.SQLException e) {
 //                        SignIn.logger.warning(e.getMessage());
             e.printStackTrace();
         }
-        
+
     }
-    
+
     private void loadClass() {
         try {
             Vector classVector = new Vector();
             classVector.add("Select Class");
-            
+
             ResultSet classRs = connection_ol.search("SELECT * FROM `class`");
-            
+
             while (classRs.next()) {
-                
+
                 classVector.add(classRs.getString("class_name"));
                 class_map.put(classRs.getString("class_name"), classRs.getString("class_id"));
             }
-            
+
             classCombo.setModel(new DefaultComboBoxModel<>(classVector));
         } catch (java.sql.SQLException e) {
 //                        SignIn.logger.warning(e.getMessage());
             System.out.println(e);
         }
-        
+
     }
-    
+
     private void subjectAdd(String subjectName, String indexNumber) {
         try {
             ResultSet subjectIdRs = connection_ol.search("SELECT * FROM `subject` WHERE `subject_name`='" + subjectName + "'");
@@ -171,18 +172,18 @@ public class Student extends javax.swing.JPanel {
             System.out.println(e);
         }
     }
-    
+
     private void loadStudentTable() {
-        
+
         try {
-            
+
             ResultSet rs = connection_ol.search("SELECT * FROM `student` INNER JOIN `status` ON `student`.`status_status_id` = `status`.`status_id` "
                     + "INNER JOIN `gender` ON `student`.`gender_gender_id` = `gender`.`gender_id` "
                     + "INNER JOIN `parent_details` ON `student`.`parent_details_details_id` = `parent_details`.`details_id` WHERE `status_status_id`='1'");
-            
+
             DefaultTableModel model = (DefaultTableModel) student_table.getModel();
             model.setRowCount(0);
-            
+
             while (rs.next()) {
                 Vector studentVector = new Vector();
                 studentVector.add(rs.getString("student_id"));
@@ -194,10 +195,10 @@ public class Student extends javax.swing.JPanel {
                 studentVector.add(rs.getString("parent_details.mothser's_name"));
                 studentVector.add(rs.getString("parent_details.farther's_name"));
                 studentVector.add(rs.getString("parent_details.guardian's_name"));
-                
+
                 model.addRow(studentVector);
             }
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -213,6 +214,7 @@ public class Student extends javax.swing.JPanel {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
+        buttonGroup2 = new javax.swing.ButtonGroup();
         background1 = new SMMV.Component.Background();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
@@ -387,18 +389,22 @@ public class Student extends javax.swing.JPanel {
         buddhist.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         buddhist.setText("Buddhist");
 
+        buttonGroup2.add(art);
         art.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         art.setText("Art");
 
+        buttonGroup2.add(dance);
         dance.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         dance.setText("Dancing");
 
         ict.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         ict.setText("ICT");
 
+        buttonGroup2.add(music);
         music.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         music.setText("Music");
 
+        buttonGroup2.add(drama);
         drama.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         drama.setText("Drama");
 
@@ -516,6 +522,23 @@ public class Student extends javax.swing.JPanel {
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
+        sinhala.setActionCommand("1");
+        english.setActionCommand("2");
+        maths.setActionCommand("3");
+        civic.setActionCommand("5");
+        science.setActionCommand("4");
+        buddhist.setActionCommand("5");
+        art.setActionCommand("16");
+        dance.setActionCommand("14");
+        ict.setActionCommand("7");
+        music.setActionCommand("13");
+        drama.setActionCommand("15");
+        history.setActionCommand("9");
+        pts.setActionCommand("10");
+        health.setActionCommand("8");
+        tamil.setActionCommand("11");
+        geography.setActionCommand("12");
+
         background3.setBackground(new java.awt.Color(0, 0, 0));
 
         ol_subject_button.setText("Select Subject");
@@ -576,7 +599,7 @@ public class Student extends javax.swing.JPanel {
         );
 
         enrollment_no_field.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        enrollment_no_field.setForeground(new java.awt.Color(0, 0, 0));
+        enrollment_no_field.setForeground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout background2Layout = new javax.swing.GroupLayout(background2);
         background2.setLayout(background2Layout);
@@ -749,6 +772,11 @@ public class Student extends javax.swing.JPanel {
         buttonGradient2.setColor1(new java.awt.Color(0, 0, 255));
         buttonGradient2.setColor2(new java.awt.Color(135, 138, 242));
         buttonGradient2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        buttonGradient2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonGradient2ActionPerformed(evt);
+            }
+        });
 
         buttonGradient3.setText("Deactive Student");
         buttonGradient3.setColor1(new java.awt.Color(0, 0, 255));
@@ -1102,15 +1130,15 @@ public class Student extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void studentAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studentAddButtonActionPerformed
-        
+
         String parentId = "";
-        
+
         String index_number = enrollment_no_field.getText();
         String first_name = fname_field.getText();
         String last_name = lname_field.getText();
         String class_id = String.valueOf(classCombo.getSelectedItem());
         int genser = 0;
-        
+
         if (male.isSelected()) {
             genser = 1;
         }
@@ -1126,7 +1154,7 @@ public class Student extends javax.swing.JPanel {
         String landNumber = land_number_field.getText();
         String line1 = line1_field.getText();
         String line2 = line2_field.getText();
-        
+
         if (index_number.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please Enter Student Index Number", "Warning", JOptionPane.WARNING_MESSAGE);
         } else if (first_name.isEmpty()) {
@@ -1160,44 +1188,44 @@ public class Student extends javax.swing.JPanel {
         } else if (line2.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please Enter Address Line 02", "Warning", JOptionPane.WARNING_MESSAGE);
         } else {
-            
+
             try {
                 ResultSet rs = connection_ol.search("SELECT * FROM `student` WHERE `email`='" + email + "' OR `student_id`='" + index_number + "'");
-                
+
                 if (rs.next()) {
                     JOptionPane.showMessageDialog(this, "Email Or Student Index Number Already Use!", "Warning", JOptionPane.WARNING_MESSAGE);
                 } else {
-                    
+
                     ResultSet perentRs = connection_ol.search("SELECT * FROM `parent_details` WHERE `parent_mobile`='" + mobileNumber + "' OR `land_number`='" + landNumber + "'");
-                    
+
                     if (perentRs.next()) {
                         JOptionPane.showMessageDialog(this, "Parent Mobile Number or Land Number Already Use!", "Warning", JOptionPane.WARNING_MESSAGE);
                     } else {
-                        
+
                         ResultSet classRs = connection_ol.search("SELECT * FROM `class_has_grade` "
                                 + "WHERE `class_class_id`='" + class_map.get(class_id) + "' AND `grade_grade_id`='" + grade_map.get(grade) + "'");
-                        
+
                         if (classRs.next()) {
-                            
+
                             connection_ol.iud("INSERT INTO `parent_details` (`mothser's_name`,`farther's_name`,`guardian's_name`,`parent_mobile`,`land_number`) "
                                     + "VALUES ('" + motherName + "','" + fatherName + "','" + guardianName + "','" + mobileNumber + "','" + landNumber + "')");
-                            
+
                             ResultSet perentResult = connection_ol.search("SELECT * FROM `parent_details` WHERE `parent_mobile`='" + mobileNumber + "' AND `land_number`='" + landNumber + "'");
-                            
+
                             if (perentResult.next()) {
                                 parentId = perentResult.getString("details_id");
-                                
+
                                 connection_ol.iud("INSERT INTO `student` (`student_id`,`first_name`,`last_name`,`email`,`mobile`,`status_status_id`,`gender_gender_id`,`parent_details_details_id`) "
                                         + "VALUES ('" + index_number + "','" + first_name + "','" + last_name + "','" + email + "','" + mobileNumber + "','1','" + genser + "','" + parentId + "')");
-                                
+
                                 String class_grade_id = classRs.getString("class_has_grade_id");
-                                
+
                                 connection_ol.iud("INSERT INTO `class_has_grade_has_student` (`student_student_id`,`class_has_grade_class_has_grade_id`) "
                                         + "VALUES ('" + index_number + "','" + class_grade_id + "')");
-                                
+
                                 if (!sinhala.isSelected() && english.isSelected() && maths.isSelected() && science.isSelected()
                                         && buddhist.isSelected() && history.isSelected() | dance.isSelected() | drama.isSelected() | music.isSelected() | art.isSelected()) {
-                                    
+
                                     JOptionPane.showMessageDialog(this, "Please Select Important Subject!", "Warning", JOptionPane.WARNING_MESSAGE);
                                 } else {
 
@@ -1250,7 +1278,7 @@ public class Student extends javax.swing.JPanel {
                                     if (art.isSelected()) {
                                         subjectAdd(art.getText(), index_number);
                                     }
-                                    
+
                                     if (grade.equals("10") | grade.equals("11")) {
                                         for (int i = 0; i < 9; i++) {
                                             String olSubjectId = String.valueOf(olTable.getValueAt(i, 0));
@@ -1264,32 +1292,32 @@ public class Student extends javax.swing.JPanel {
                                                     + "VALUES ('" + olSubjectId + "','" + index_number + "')");
                                         }
                                     }
-                                    
+
                                     connection_ol.iud("INSERT INTO `address` (`line_1`,`line_2`,`student_student_id`) "
                                             + "VALUES ('" + line1 + "','" + line2 + "','" + index_number + "')");
-                                    
+
                                     JOptionPane.showMessageDialog(this, "New Student Added Successfully", "Success", JOptionPane.DEFAULT_OPTION);
                                     clear();
-                                    
+
                                 }
-                                
+
                             } else {
                                 JOptionPane.showMessageDialog(this, "Invalid Parent!", "Warning", JOptionPane.WARNING_MESSAGE);
                             }
-                            
+
                         } else {
                             //grade ekata classs tika insert karanawa 
                             JOptionPane.showMessageDialog(this, "Please Update Grade For Class", "Warning", JOptionPane.WARNING_MESSAGE);
                         }
-                        
+
                     }
-                    
+
                 }
-                
+
             } catch (java.sql.SQLException e) {
                 System.out.println(e);
             }
-            
+
         }
 
     }//GEN-LAST:event_studentAddButtonActionPerformed
@@ -1315,7 +1343,7 @@ public class Student extends javax.swing.JPanel {
             art.setEnabled(false);
             ol_subject_button.setEnabled(true);
         } else {
-            
+
             ol_subject_button.setEnabled(false);
             sinhala.setEnabled(true);
             english.setEnabled(true);
@@ -1343,18 +1371,18 @@ public class Student extends javax.swing.JPanel {
     }//GEN-LAST:event_ol_subject_buttonActionPerformed
 
     private void search_field_studentKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_search_field_studentKeyPressed
-        
+
         String search = search_field_student.getText();
-        
+
         try {
             ResultSet rs = connection_ol.search("SELECT * FROM `student` INNER JOIN `status` ON `student`.`status_status_id` = `status`.`status_id` "
                     + "INNER JOIN `gender` ON `student`.`gender_gender_id` = `gender`.`gender_id` "
                     + "INNER JOIN `parent_details` ON `student`.`parent_details_details_id` = `parent_details`.`details_id` "
                     + "WHERE `first_name`  LIKE '" + search + "%' OR `last_name` LIKE '" + search + "%'");
-            
+
             DefaultTableModel model = (DefaultTableModel) student_table.getModel();
             model.setRowCount(0);
-            
+
             while (rs.next()) {
                 Vector studentVector = new Vector();
                 studentVector.add(rs.getString("student_id"));
@@ -1366,29 +1394,30 @@ public class Student extends javax.swing.JPanel {
                 studentVector.add(rs.getString("parent_details.mothser's_name"));
                 studentVector.add(rs.getString("parent_details.farther's_name"));
                 studentVector.add(rs.getString("parent_details.guardian's_name"));
-                
+
                 model.addRow(studentVector);
             }
-        } catch (Exception e) {
+        } catch (java.sql.SQLException e) {
             e.printStackTrace();
         }
     }//GEN-LAST:event_search_field_studentKeyPressed
 
     private void student_tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_student_tableMouseClicked
-        
+
         if (evt.getClickCount() == 2) {
             studentAddButton.setEnabled(false);
             email_field1.setEditable(false);
             enrollment_no_field.setEditable(false);
             mobile_field.setEditable(false);
+            gradeCombo.setEnabled(false);
             int row = student_table.getSelectedRow();
-            
+
             index_number = String.valueOf(student_table.getValueAt(row, 0));
             try {
                 ResultSet rs = connection_ol.search("SELECT * FROM `student` INNER JOIN `status` ON `student`.`status_status_id` = `status`.`status_id` "
                         + "INNER JOIN `gender` ON `student`.`gender_gender_id` = `gender`.`gender_id` "
                         + "INNER JOIN `parent_details` ON `student`.`parent_details_details_id` = `parent_details`.`details_id` WHERE `student_id`='" + index_number + "'");
-                
+
                 if (rs.next()) {
                     enrollment_no_field.setText(String.valueOf(student_table.getValueAt(row, 0)));
                     fname_field.setText(String.valueOf(student_table.getValueAt(row, 1)));
@@ -1399,16 +1428,16 @@ public class Student extends javax.swing.JPanel {
                     mother_name_feild.setText(String.valueOf(student_table.getValueAt(row, 6)));
                     father_name_field.setText(String.valueOf(student_table.getValueAt(row, 7)));
                     guardian_name_field.setText(String.valueOf(student_table.getValueAt(row, 8)));
-                    
+
                     String genderId = rs.getString("gender.name");
                     String perentId = rs.getString("parent_details_details_id");
-                    
+
                     if (genderId.equals("Male")) {
                         male.setSelected(true);
                     } else {
                         female.setSelected(true);
                     }
-                    
+
                     ResultSet addressRs = connection_ol.search("SELECT * FROM `address` WHERE `student_student_id`='" + index_number + "'");
                     if (addressRs.next()) {
                         String line1 = addressRs.getString("line_1");
@@ -1416,41 +1445,311 @@ public class Student extends javax.swing.JPanel {
                         line1_field.setText(line1);
                         line2_field.setText(line2);
                     }
-                    
+
                     ResultSet classRs = connection_ol.search("SELECT * FROM `class_has_grade_has_student` WHERE `student_student_id`='" + index_number + "'");
                     if (classRs.next()) {
                         String class_grade_id = classRs.getString("class_has_grade_class_has_grade_id");
-                        
+
                         ResultSet classHasGradeRs = connection_ol.search("SELECT * FROM `class_has_grade` WHERE `class_has_grade_id`='" + class_grade_id + "'");
                         if (classHasGradeRs.next()) {
                             String classId = classHasGradeRs.getString("class_class_id");
                             String gradeId = classHasGradeRs.getString("grade_grade_id");
-                            
+
                             classCombo.setSelectedIndex(Integer.parseInt(classId));
                             gradeCombo.setSelectedIndex(Integer.parseInt(gradeId));
                         }
                     }
-                    
+                    String grade = String.valueOf(gradeCombo.getSelectedItem());
+
                     ResultSet subjectRs = connection_ol.search("SELECT * FROM `student_has_subject`"
                             + " INNER JOIN `subject` ON `student_has_subject`.`subject_subject_id` = `subject`.`subject_id` WHERE `student_student_id`='" + index_number + "'");
-                    
-                    OL_Subject olSubject = new OL_Subject(dashboard, true, this);
-                    
-                    while (subjectRs.next()) {        
-                        String subjectName = subjectRs.getString("subject.subject_name");
-                        String english = olSubject.getEnglish().getText();
-                        if(subjectName.equals(english)){
-                            olSubject.getEnglish().setSelected(true);
+
+                    if (grade.equals("10") | grade.equals("11")) {
+                        OL_Subject olSubject = new OL_Subject(dashboard, true, this);
+                        String olaosinhala = olSubject.getAosinhala().getActionCommand();
+                        String olart = olSubject.getArt().getActionCommand();
+                        String olbuddist = olSubject.getBuddist().getActionCommand();
+                        String olbussness = olSubject.getBussness().getActionCommand();
+                        String olcatholicm = olSubject.getCatholicm().getActionCommand();
+                        String olchristianity = olSubject.getChristianity().getActionCommand();
+                        String olcivi = olSubject.getCivic().getActionCommand();
+                        String oldanceb = olSubject.getDanceb().getActionCommand();
+                        String oldanceo = olSubject.getDanceo().getActionCommand();
+                        String oldrama = olSubject.getDrama().getActionCommand();
+                        String oleconomic = olSubject.getEconomic().getActionCommand();
+                        String olentrepreneurship = olSubject.getEntrepreneurship().getActionCommand();
+                        String olfrench = olSubject.getFrench().getActionCommand();
+                        String olgeogra = olSubject.getGeogra().getActionCommand();
+                        String olgermen = olSubject.getGermen().getActionCommand();
+                        String olhealth = olSubject.getHealth().getActionCommand();
+                        String olict = olSubject.getIct().getActionCommand();
+                        String olislam = olSubject.getIslam().getActionCommand();
+                        String oljapan = olSubject.getJapan().getActionCommand();
+                        String olkarean = olSubject.getKarean().getActionCommand();
+                        String olmusico = olSubject.getMusico().getActionCommand();
+                        String olmusicw = olSubject.getMusicw().getActionCommand();
+                        String olpali = olSubject.getPali().getActionCommand();
+                        String olsaivanery = olSubject.getSaivanery().getActionCommand();
+                        String olsanskrit = olSubject.getSanskrit().getActionCommand();
+                        String olsecond = olSubject.getSecond().getActionCommand();
+                        String olsecod2 = olSubject.getSecont2().getActionCommand();
+                        String olsinhala = olSubject.getSinhala().getActionCommand();
+                        String oltamil = olSubject.getTamil().getActionCommand();
+                        String olenglish = olSubject.getEnglish().getActionCommand();
+                        String olhistory = olSubject.getHistory().getActionCommand();
+                        String olmaths = olSubject.getMathematics().getActionCommand();
+                        String olscience = olSubject.getScience().getActionCommand();
+
+                        while (subjectRs.next()) {
+                            String subjectId = subjectRs.getString("subject_subject_id");
+
+                            if (subjectId.equals(olenglish)) {
+                                olSubject.getEnglish().setSelected(true);
+                            }
+                            if (subjectId.equals(olaosinhala)) {
+                                olSubject.getAosinhala().setSelected(true);
+                            }
+                            if (subjectId.equals(olart)) {
+                                olSubject.getArt().setSelected(true);
+                            }
+                            if (subjectId.equals(olbuddist)) {
+                                olSubject.getBuddist().setSelected(true);
+                            }
+                            if (subjectId.equals(olbussness)) {
+                                olSubject.getBussness().setSelected(true);
+                            }
+                            if (subjectId.equals(olcatholicm)) {
+                                olSubject.getCatholicm().setSelected(true);
+                            }
+                            if (subjectId.equals(olchristianity)) {
+                                olSubject.getChristianity().setSelected(true);
+                            }
+                            if (subjectId.equals(olcivi)) {
+                                olSubject.getCivic().setSelected(true);
+                            }
+                            if (subjectId.equals(oldanceb)) {
+                                olSubject.getDanceb().setSelected(true);
+                            }
+                            if (subjectId.equals(oldanceo)) {
+                                olSubject.getDanceo().setSelected(true);
+                            }
+                            if (subjectId.equals(oldrama)) {
+                                olSubject.getDrama().setSelected(true);
+                            }
+                            if (subjectId.equals(oleconomic)) {
+                                olSubject.getEconomic().setSelected(true);
+                            }
+                            if (subjectId.equals(olentrepreneurship)) {
+                                olSubject.getEntrepreneurship().setSelected(true);
+                            }
+                            if (subjectId.equals(olfrench)) {
+                                olSubject.getFrench().setSelected(true);
+                            }
+                            if (subjectId.equals(olgeogra)) {
+                                olSubject.getGeogra().setSelected(true);
+                            }
+                            if (subjectId.equals(olgermen)) {
+                                olSubject.getGermen().setSelected(true);
+                            }
+                            if (subjectId.equals(olhealth)) {
+                                olSubject.getHealth().setSelected(true);
+                            }
+                            if (subjectId.equals(olict)) {
+                                olSubject.getIct().setSelected(true);
+                            }
+                            if (subjectId.equals(olislam)) {
+                                olSubject.getIslam().setSelected(true);
+                            }
+                            if (subjectId.equals(oljapan)) {
+                                olSubject.getJapan().setSelected(true);
+                            }
+                            if (subjectId.equals(olkarean)) {
+                                olSubject.getKarean().setSelected(true);
+                            }
+                            if (subjectId.equals(olmusico)) {
+                                olSubject.getMusico().setSelected(true);
+                            }
+                            if (subjectId.equals(olmusicw)) {
+                                olSubject.getMusicw().setSelected(true);
+                            }
+                            if (subjectId.equals(olpali)) {
+                                olSubject.getPali().setSelected(true);
+                            }
+                            if (subjectId.equals(olsaivanery)) {
+                                olSubject.getSaivanery().setSelected(true);
+                            }
+                            if (subjectId.equals(olsanskrit)) {
+                                olSubject.getSanskrit().setSelected(true);
+                            }
+                            if (subjectId.equals(olsecond)) {
+                                olSubject.getSecond().setSelected(true);
+                            }
+                            if (subjectId.equals(olsecod2)) {
+                                olSubject.getSecont2().setSelected(true);
+                            }
+                            if (subjectId.equals(olsinhala)) {
+                                olSubject.getSinhala().setSelected(true);
+                            }
+                            if (subjectId.equals(oltamil)) {
+                                olSubject.getTamil().setSelected(true);
+                            }
                         }
+                        olSubject.setVisible(true);
+
+                    } else {
+
+                        sinhala.setSelected(true);
+                        english.setSelected(true);
+                        maths.setSelected(true);
+                        science.setSelected(true);
+                        buddhist.setSelected(true);
+                        civic.setSelected(true);
+                        ict.setSelected(true);
+                        health.setSelected(true);
+                        history.setSelected(true);
+                        pts.setSelected(true);
+                        tamil.setSelected(true);
+                        geography.setSelected(true);
+
+                        while (subjectRs.next()) {
+                            String subjectId = subjectRs.getString("subject_subject_id");
+
+                            if (subjectId.equals(music.getActionCommand())) {
+                                music.setSelected(true);
+                                primaryArtId = music.getActionCommand();
+                            }
+                            if (subjectId.equals(art.getActionCommand())) {
+                                art.setSelected(true);
+                                primaryArtId = art.getActionCommand();
+                            }
+                            if (subjectId.equals(drama.getActionCommand())) {
+                                drama.setSelected(true);
+                                primaryArtId = drama.getActionCommand();
+                            }
+                            if (subjectId.equals(dance.getActionCommand())) {
+                                dance.setSelected(true);
+                                primaryArtId = dance.getActionCommand();
+                            }
+                        }
+
+                        sinhala.setEnabled(false);
+                        english.setEnabled(false);
+                        maths.setEnabled(false);
+                        science.setEnabled(false);
+                        buddhist.setEnabled(false);
+                        civic.setEnabled(false);
+                        ict.setEnabled(false);
+                        health.setEnabled(false);
+                        history.setEnabled(false);
+                        pts.setEnabled(false);
+                        tamil.setEnabled(false);
+                        geography.setEnabled(false);
+
                     }
-                    olSubject.setVisible(true);
-                    
+
                 }
             } catch (java.sql.SQLException e) {
                 e.printStackTrace();
             }
         }
     }//GEN-LAST:event_student_tableMouseClicked
+
+    private void buttonGradient2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGradient2ActionPerformed
+        // TODO add your handling code here:
+        String index_number = enrollment_no_field.getText();
+        String first_name = fname_field.getText();
+        String last_name = lname_field.getText();
+        String classId = String.valueOf(classCombo.getSelectedItem());
+        String gradeId = String.valueOf(gradeCombo.getSelectedItem());
+        int genser = 0;
+
+        if (male.isSelected()) {
+            genser = 1;
+        }
+        if (female.isSelected()) {
+            genser = 2;
+        }
+        String motherName = mother_name_feild.getText();
+        String fatherName = father_name_field.getText();
+        String guardianName = guardian_name_field.getText();
+        String mobileNumber = mobile_field.getText();
+        String landNumber = land_number_field.getText();
+        String line1 = line1_field.getText();
+        String line2 = line2_field.getText();
+        nomalGradeSubject = buttonGroup2.getSelection().getActionCommand();
+
+        if (first_name.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please Enter Student First Name", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (last_name.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please Enter Student Last Name", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (classId.equals("Select Class")) {
+            JOptionPane.showMessageDialog(this, "Please Select Student Class", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (!male.isSelected() && !female.isSelected()) {
+            JOptionPane.showMessageDialog(this, "Please Select Gender", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (motherName.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please Enter Student's Mother Name", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (fatherName.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please Enter Student's Father Name", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (landNumber.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please Enter Land Number", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (!landNumber.matches(Validation.LAND_NUMBER_VALIDATION.validate())) {
+            JOptionPane.showMessageDialog(this, "Invalid Land Number", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (line1.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please Enter Address Line 01", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (line2.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please Enter Address Line 02", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else {
+
+            try {
+
+                ResultSet rs = connection_ol.search("SELECT * FROM `student` WHERE `student_id`='" + index_number + "'");
+
+                if (rs.next()) {
+                    String perentId = rs.getString("parent_details_details_id");
+                    connection_ol.iud("UPDATE `address` SET `line_1`='" + line1 + "', `line_2`='" + line2 + "' WHERE `student_student_id`='" + index_number + "'");
+
+                    ResultSet classhasgradeRs = connection_ol.search("SELECT * FROM `class_has_grade` WHERE `class_class_id`='" + class_map.get(classId) + "' AND "
+                            + "`grade_grade_id`='" + grade_map.get(gradeId) + "'");
+
+                    if (classhasgradeRs.next()) {
+                        String classhasgradeId = classhasgradeRs.getString("class_has_grade_id");
+                        connection_ol.iud("UPDATE `class_has_grade_has_student` SET `class_has_grade_class_has_grade_id`='" + classhasgradeId + "' "
+                                + " WHERE `student_student_id`='" + index_number + "'");
+                    }
+
+                    connection_ol.iud("UPDATE `parent_details` SET `mothser's_name`='" + motherName + "', `farther's_name`='" + fatherName + "', "
+                            + "`guardian's_name`='" + guardianName + "', `land_number`='" + landNumber + "' WHERE `details_id`='" + perentId + "'");
+
+                    if (gradeId.equals("10") | gradeId.equals("11")) {
+                        //olsubject code
+                    } else {
+
+                        if (!primaryArtId.equals(nomalGradeSubject)) {
+                            ResultSet nomalGradeRs = connection_ol.search("SELECT * FROM `student_has_subject` WHERE `subject_subject_id`='" + primaryArtId + "' AND `student_student_id`='" + index_number + "'");
+                            if (nomalGradeRs.next()) {
+                                String nomalGradeSubjectId = nomalGradeRs.getString("student_has_subject_id");
+                                connection_ol.iud("UPDATE `student_has_subject` SET `subject_subject_id`='" + nomalGradeSubject + "' "
+                                + " WHERE `student_student_id`='" + index_number + "' AND `student_has_subject_id`='"+nomalGradeSubjectId+"'");
+                            }
+                        }
+
+                    }
+                    
+                    connection_ol.iud("UPDATE `student` SET `first_name`='" + first_name + "', `last_name`='" + last_name + "', "
+                            + "`gender_gender_id`='" + genser + "' WHERE `student_id`='" + index_number + "'");
+                    
+                    JOptionPane.showMessageDialog(this, index_number+" Student Update Sucessfully", "Warning", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Invalid Student", "Warning", JOptionPane.WARNING_MESSAGE);
+                }
+
+            } catch (java.sql.SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+    }//GEN-LAST:event_buttonGradient2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1466,6 +1765,7 @@ public class Student extends javax.swing.JPanel {
     private SMMV.Component.ButtonGradient buttonGradient2;
     private SMMV.Component.ButtonGradient buttonGradient3;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JCheckBox civic;
     private javax.swing.JComboBox<String> classCombo;
     private javax.swing.JCheckBox dance;
