@@ -55,14 +55,15 @@ public class Card_2 extends javax.swing.JPanel {
         lbValues = new javax.swing.JLabel();
 
         lbIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lk/chandula/image/money.png"))); // NOI18N
+        lbIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SMMV/OL/img/sport_dashboard(balck).png"))); // NOI18N
 
         lbTitle.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
         lbTitle.setForeground(new java.awt.Color(255, 255, 255));
-        lbTitle.setText("Yearly Earning");
+        lbTitle.setText("Sports Count");
 
         lbValues.setFont(new java.awt.Font("sansserif", 1, 22)); // NOI18N
         lbValues.setForeground(new java.awt.Color(255, 255, 255));
+        lbValues.setText("10");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -77,8 +78,8 @@ public class Card_2 extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lbTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lbIcon)
-                        .addGap(15, 15, 15))))
+                        .addComponent(lbIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(23, 23, 23))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -86,9 +87,9 @@ public class Card_2 extends javax.swing.JPanel {
                 .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lbTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbIcon))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
-                .addComponent(lbValues)
+                    .addComponent(lbIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(lbValues, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
                 .addGap(20, 20, 20))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -109,19 +110,14 @@ public class Card_2 extends javax.swing.JPanel {
     private void report1() {
         
         try {
-            LocalDateTime nowtime = LocalDateTime.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
-            String addedDateTime = nowtime.format(formatter);
-            
             double total = 0;
-            ResultSet InvoiceResult = connection_ol.search("SELECT * FROM `invoice` WHERE `invoice_date` LIKE '"+addedDateTime+"%'");
-            while (InvoiceResult.next()) {                
+            ResultSet sportResult = connection_ol.search("SELECT * FROM `sports`");
+            while (sportResult.next()) {                
                 
-                double item = Double.parseDouble(InvoiceResult.getString("total"));
-                total += item;
+                total += 1;
                 
             }
-                        lbValues.setText("RS : "+String.valueOf(total)+"0");
+                        lbValues.setText(String.valueOf(total));
         } catch (Exception e) {
         }
     }
