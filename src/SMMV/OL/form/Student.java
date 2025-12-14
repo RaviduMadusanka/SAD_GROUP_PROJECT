@@ -782,6 +782,11 @@ public class Student extends javax.swing.JPanel {
         buttonGradient3.setColor1(new java.awt.Color(0, 0, 255));
         buttonGradient3.setColor2(new java.awt.Color(149, 149, 248));
         buttonGradient3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        buttonGradient3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonGradient3ActionPerformed(evt);
+            }
+        });
 
         line1_field.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
 
@@ -1656,100 +1661,149 @@ public class Student extends javax.swing.JPanel {
 
     private void buttonGradient2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGradient2ActionPerformed
         // TODO add your handling code here:
-        String index_number = enrollment_no_field.getText();
-        String first_name = fname_field.getText();
-        String last_name = lname_field.getText();
-        String classId = String.valueOf(classCombo.getSelectedItem());
-        String gradeId = String.valueOf(gradeCombo.getSelectedItem());
-        int genser = 0;
-
-        if (male.isSelected()) {
-            genser = 1;
-        }
-        if (female.isSelected()) {
-            genser = 2;
-        }
-        String motherName = mother_name_feild.getText();
-        String fatherName = father_name_field.getText();
-        String guardianName = guardian_name_field.getText();
-        String mobileNumber = mobile_field.getText();
-        String landNumber = land_number_field.getText();
-        String line1 = line1_field.getText();
-        String line2 = line2_field.getText();
-        nomalGradeSubject = buttonGroup2.getSelection().getActionCommand();
-
-        if (first_name.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please Enter Student First Name", "Warning", JOptionPane.WARNING_MESSAGE);
-        } else if (last_name.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please Enter Student Last Name", "Warning", JOptionPane.WARNING_MESSAGE);
-        } else if (classId.equals("Select Class")) {
-            JOptionPane.showMessageDialog(this, "Please Select Student Class", "Warning", JOptionPane.WARNING_MESSAGE);
-        } else if (!male.isSelected() && !female.isSelected()) {
-            JOptionPane.showMessageDialog(this, "Please Select Gender", "Warning", JOptionPane.WARNING_MESSAGE);
-        } else if (motherName.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please Enter Student's Mother Name", "Warning", JOptionPane.WARNING_MESSAGE);
-        } else if (fatherName.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please Enter Student's Father Name", "Warning", JOptionPane.WARNING_MESSAGE);
-        } else if (landNumber.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please Enter Land Number", "Warning", JOptionPane.WARNING_MESSAGE);
-        } else if (!landNumber.matches(Validation.LAND_NUMBER_VALIDATION.validate())) {
-            JOptionPane.showMessageDialog(this, "Invalid Land Number", "Warning", JOptionPane.WARNING_MESSAGE);
-        } else if (line1.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please Enter Address Line 01", "Warning", JOptionPane.WARNING_MESSAGE);
-        } else if (line2.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please Enter Address Line 02", "Warning", JOptionPane.WARNING_MESSAGE);
+        if (student_table.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(this, "Please Select Student to Deactive or Active", "Warning", JOptionPane.WARNING_MESSAGE);
         } else {
+            String index_number = enrollment_no_field.getText();
+            String first_name = fname_field.getText();
+            String last_name = lname_field.getText();
+            String classId = String.valueOf(classCombo.getSelectedItem());
+            String gradeId = String.valueOf(gradeCombo.getSelectedItem());
+            int genser = 0;
 
-            try {
+            if (male.isSelected()) {
+                genser = 1;
+            }
+            if (female.isSelected()) {
+                genser = 2;
+            }
+            String motherName = mother_name_feild.getText();
+            String fatherName = father_name_field.getText();
+            String guardianName = guardian_name_field.getText();
+            String mobileNumber = mobile_field.getText();
+            String landNumber = land_number_field.getText();
+            String line1 = line1_field.getText();
+            String line2 = line2_field.getText();
 
-                ResultSet rs = connection_ol.search("SELECT * FROM `student` WHERE `student_id`='" + index_number + "'");
+            if (first_name.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please Enter Student First Name", "Warning", JOptionPane.WARNING_MESSAGE);
+            } else if (last_name.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please Enter Student Last Name", "Warning", JOptionPane.WARNING_MESSAGE);
+            } else if (classId.equals("Select Class")) {
+                JOptionPane.showMessageDialog(this, "Please Select Student Class", "Warning", JOptionPane.WARNING_MESSAGE);
+            } else if (!male.isSelected() && !female.isSelected()) {
+                JOptionPane.showMessageDialog(this, "Please Select Gender", "Warning", JOptionPane.WARNING_MESSAGE);
+            } else if (motherName.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please Enter Student's Mother Name", "Warning", JOptionPane.WARNING_MESSAGE);
+            } else if (fatherName.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please Enter Student's Father Name", "Warning", JOptionPane.WARNING_MESSAGE);
+            } else if (landNumber.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please Enter Land Number", "Warning", JOptionPane.WARNING_MESSAGE);
+            } else if (!landNumber.matches(Validation.LAND_NUMBER_VALIDATION.validate())) {
+                JOptionPane.showMessageDialog(this, "Invalid Land Number", "Warning", JOptionPane.WARNING_MESSAGE);
+            } else if (line1.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please Enter Address Line 01", "Warning", JOptionPane.WARNING_MESSAGE);
+            } else if (line2.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please Enter Address Line 02", "Warning", JOptionPane.WARNING_MESSAGE);
+            } else {
 
-                if (rs.next()) {
-                    String perentId = rs.getString("parent_details_details_id");
-                    connection_ol.iud("UPDATE `address` SET `line_1`='" + line1 + "', `line_2`='" + line2 + "' WHERE `student_student_id`='" + index_number + "'");
+                try {
 
-                    ResultSet classhasgradeRs = connection_ol.search("SELECT * FROM `class_has_grade` WHERE `class_class_id`='" + class_map.get(classId) + "' AND "
-                            + "`grade_grade_id`='" + grade_map.get(gradeId) + "'");
+                    ResultSet rs = connection_ol.search("SELECT * FROM `student` WHERE `student_id`='" + index_number + "'");
 
-                    if (classhasgradeRs.next()) {
-                        String classhasgradeId = classhasgradeRs.getString("class_has_grade_id");
-                        connection_ol.iud("UPDATE `class_has_grade_has_student` SET `class_has_grade_class_has_grade_id`='" + classhasgradeId + "' "
-                                + " WHERE `student_student_id`='" + index_number + "'");
-                    }
+                    if (rs.next()) {
+                        String perentId = rs.getString("parent_details_details_id");
+                        connection_ol.iud("UPDATE `address` SET `line_1`='" + line1 + "', `line_2`='" + line2 + "' WHERE `student_student_id`='" + index_number + "'");
 
-                    connection_ol.iud("UPDATE `parent_details` SET `mothser's_name`='" + motherName + "', `farther's_name`='" + fatherName + "', "
-                            + "`guardian's_name`='" + guardianName + "', `land_number`='" + landNumber + "' WHERE `details_id`='" + perentId + "'");
+                        ResultSet classhasgradeRs = connection_ol.search("SELECT * FROM `class_has_grade` WHERE `class_class_id`='" + class_map.get(classId) + "' AND "
+                                + "`grade_grade_id`='" + grade_map.get(gradeId) + "'");
 
-                    if (gradeId.equals("10") | gradeId.equals("11")) {
-                        //olsubject code
-                    } else {
-
-                        if (!primaryArtId.equals(nomalGradeSubject)) {
-                            ResultSet nomalGradeRs = connection_ol.search("SELECT * FROM `student_has_subject` WHERE `subject_subject_id`='" + primaryArtId + "' AND `student_student_id`='" + index_number + "'");
-                            if (nomalGradeRs.next()) {
-                                String nomalGradeSubjectId = nomalGradeRs.getString("student_has_subject_id");
-                                connection_ol.iud("UPDATE `student_has_subject` SET `subject_subject_id`='" + nomalGradeSubject + "' "
-                                + " WHERE `student_student_id`='" + index_number + "' AND `student_has_subject_id`='"+nomalGradeSubjectId+"'");
-                            }
+                        if (classhasgradeRs.next()) {
+                            String classhasgradeId = classhasgradeRs.getString("class_has_grade_id");
+                            connection_ol.iud("UPDATE `class_has_grade_has_student` SET `class_has_grade_class_has_grade_id`='" + classhasgradeId + "' "
+                                    + " WHERE `student_student_id`='" + index_number + "'");
                         }
 
-                    }
-                    
-                    connection_ol.iud("UPDATE `student` SET `first_name`='" + first_name + "', `last_name`='" + last_name + "', "
-                            + "`gender_gender_id`='" + genser + "' WHERE `student_id`='" + index_number + "'");
-                    
-                    JOptionPane.showMessageDialog(this, index_number+" Student Update Sucessfully", "Warning", JOptionPane.WARNING_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(this, "Invalid Student", "Warning", JOptionPane.WARNING_MESSAGE);
-                }
+                        connection_ol.iud("UPDATE `parent_details` SET `mothser's_name`='" + motherName + "', `farther's_name`='" + fatherName + "', "
+                                + "`guardian's_name`='" + guardianName + "', `land_number`='" + landNumber + "' WHERE `details_id`='" + perentId + "'");
 
-            } catch (java.sql.SQLException e) {
-                e.printStackTrace();
+                        if (gradeId.equals("10") | gradeId.equals("11")) {
+
+                            ResultSet olSubjectDeleteRs = connection_ol.search("SELECT * FROM `student_has_subject` WHERE `student_student_id`='" + index_number + "'");
+                            while (olSubjectDeleteRs.next()) {
+                                String olSubjectId = olSubjectDeleteRs.getString("subject_subject_id");
+                                connection_ol.iud("DELETE FROM `student_has_subject` WHERE `subject_subject_id`='" + olSubjectId + "' AND `student_student_id`='" + index_number + "'");
+                            }
+
+                            for (int i = 0; i < 9; i++) {
+                                String olSubjectId = String.valueOf(olTable.getValueAt(i, 0));
+                                ResultSet olSubjectRs = connection_ol.search("SELECT * FROM `category_subjects` WHERE `subject_subject_id`='" + olSubjectId + "'");
+                                while (olSubjectRs.next()) {
+                                    String category_id = olSubjectRs.getString("category_subjects_id");
+                                    connection_ol.iud("INSERT INTO `student_for_category_subject` (`student_student_id`,`category_subjects_category_subjects_id`) "
+                                            + "VALUES ('" + index_number + "','" + category_id + "')");
+                                }
+                                connection_ol.iud("INSERT INTO `student_has_subject` (`subject_subject_id`,`student_student_id`) "
+                                        + "VALUES ('" + olSubjectId + "','" + index_number + "')");
+                            }
+
+                        } else {
+                            nomalGradeSubject = buttonGroup2.getSelection().getActionCommand();
+
+                            if (!primaryArtId.equals(nomalGradeSubject)) {
+                                ResultSet nomalGradeRs = connection_ol.search("SELECT * FROM `student_has_subject` WHERE `subject_subject_id`='" + primaryArtId + "' AND `student_student_id`='" + index_number + "'");
+                                if (nomalGradeRs.next()) {
+                                    String nomalGradeSubjectId = nomalGradeRs.getString("student_has_subject_id");
+                                    connection_ol.iud("UPDATE `student_has_subject` SET `subject_subject_id`='" + nomalGradeSubject + "' "
+                                            + " WHERE `student_student_id`='" + index_number + "' AND `student_has_subject_id`='" + nomalGradeSubjectId + "'");
+                                }
+                            }
+
+                        }
+
+                        connection_ol.iud("UPDATE `student` SET `first_name`='" + first_name + "', `last_name`='" + last_name + "', "
+                                + "`gender_gender_id`='" + genser + "' WHERE `student_id`='" + index_number + "'");
+
+                        JOptionPane.showMessageDialog(this, index_number + " Student Update Sucessfully", "Warning", JOptionPane.WARNING_MESSAGE);
+                        enrollment_no_field.setEditable(true);
+                        email_field1.setEditable(true);
+                        mobile_field.setEditable(true);
+                        gradeCombo.setEnabled(true);
+                        studentAddButton.setEnabled(true);
+                        clear();
+                        loadStudentTable();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Invalid Student", "Warning", JOptionPane.WARNING_MESSAGE);
+                    }
+
+                } catch (java.sql.SQLException e) {
+                    e.printStackTrace();
+                }
             }
+
         }
 
-
     }//GEN-LAST:event_buttonGradient2ActionPerformed
+
+    private void buttonGradient3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGradient3ActionPerformed
+        // TODO add your handling code here:
+        if (student_table.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(this, "Please Select Student to Deactive or Active", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else {
+
+            String index_number = enrollment_no_field.getText();
+            connection_ol.iud("UPDATE `student` SET `status_status_id`='2' WHERE `student_id`='" + index_number + "'");
+            JOptionPane.showMessageDialog(this, index_number + " Student Deactivate Sucessfully", "Warning", JOptionPane.WARNING_MESSAGE);
+            enrollment_no_field.setEditable(true);
+            email_field1.setEditable(true);
+            mobile_field.setEditable(true);
+            gradeCombo.setEnabled(true);
+            studentAddButton.setEnabled(true);
+            clear();
+            loadStudentTable();
+
+        }
+    }//GEN-LAST:event_buttonGradient3ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
