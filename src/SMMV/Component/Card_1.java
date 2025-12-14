@@ -54,14 +54,15 @@ public class Card_1 extends javax.swing.JPanel {
         lbTitle = new javax.swing.JLabel();
         lbValues = new javax.swing.JLabel();
 
-        lbIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lk/chandula/image/earning.png"))); // NOI18N
+        lbIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SMMV/OL/img/teacher_dashb oards(black).png"))); // NOI18N
 
         lbTitle.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
         lbTitle.setForeground(new java.awt.Color(255, 255, 255));
-        lbTitle.setText("Monthly  Earnings");
+        lbTitle.setText("Teacher Count");
 
         lbValues.setFont(new java.awt.Font("sansserif", 1, 22)); // NOI18N
         lbValues.setForeground(new java.awt.Color(255, 255, 255));
+        lbValues.setText("30");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -77,17 +78,17 @@ public class Card_1 extends javax.swing.JPanel {
                         .addComponent(lbTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lbIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(15, 15, 15))))
+                        .addGap(43, 43, 43))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbIcon))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
-                .addComponent(lbValues)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lbTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lbIcon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(lbValues, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
                 .addGap(20, 20, 20))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -108,19 +109,14 @@ public class Card_1 extends javax.swing.JPanel {
     private void report1() {
         
         try {
-            LocalDateTime nowtime = LocalDateTime.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
-            String addedDateTime = nowtime.format(formatter);
-            
-            double total = 0;
-            ResultSet InvoiceResult = connection_ol.search("SELECT * FROM `invoice` WHERE `invoice_date` LIKE '"+addedDateTime+"%'");
-            while (InvoiceResult.next()) {                
+             double total = 0;
+            ResultSet teacherResult = connection_ol.search("SELECT * FROM `teacher` WHERE `status_status_id`='1'");
+            while (teacherResult.next()) {                
                 
-                double item = Double.parseDouble(InvoiceResult.getString("total"));
-                total += item;
+                total += 1;
                 
             }
-                        lbValues.setText("RS : "+String.valueOf(total)+"0");
+                        lbValues.setText(String.valueOf(total));
         } catch (Exception e) {
         }
     }
