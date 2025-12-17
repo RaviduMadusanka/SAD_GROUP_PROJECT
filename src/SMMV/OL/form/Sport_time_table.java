@@ -4,17 +4,112 @@
  */
 package SMMV.OL.form;
 
+import SMMV.Connection.connection_ol;
+import java.awt.Color;
+import java.sql.ResultSet;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Vector;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+
 /**
  *
  * @author user
  */
 public class Sport_time_table extends javax.swing.JPanel {
 
+    HashMap<String, String> sport_map = new HashMap<>();
+    HashMap<String, String> day_map = new HashMap<>();
+    String sportId = "";
+
     /**
      * Creates new form Sport_time_table
      */
     public Sport_time_table() {
         initComponents();
+        JTableHeader tableHeader = sportTable.getTableHeader();
+        tableHeader.setBackground(new Color(0, 0, 255));
+        tableHeader.setForeground(Color.WHITE);
+        loadSport();
+        loadSportDay();
+        loadSportTable();
+
+    }
+
+    private void loadSport() {
+        try {
+            Vector sportVector = new Vector();
+            sportVector.add("Select Sport");
+
+            ResultSet sportResult = connection_ol.search("SELECT * FROM `sports`");
+
+            while (sportResult.next()) {
+
+                sportVector.add(sportResult.getString("sport_name"));
+                sport_map.put(sportResult.getString("sport_name"), sportResult.getString("sports_id"));
+            }
+
+            sportCombo.setModel(new DefaultComboBoxModel<>(sportVector));
+        } catch (java.sql.SQLException e) {
+//                        SignIn.logger.warning(e.getMessage());
+            System.out.println(e);
+        }
+    }
+
+    private void loadSportDay() {
+        try {
+            Vector dayVector = new Vector();
+            dayVector.add("Select day");
+
+            ResultSet dayResult = connection_ol.search("SELECT * FROM `days`");
+
+            while (dayResult.next()) {
+
+                dayVector.add(dayResult.getString("day_name"));
+                day_map.put(dayResult.getString("day_name"), dayResult.getString("day_id"));
+            }
+
+            dayCombo.setModel(new DefaultComboBoxModel<>(dayVector));
+        } catch (java.sql.SQLException e) {
+//                        SignIn.logger.warning(e.getMessage());
+            System.out.println(e);
+        }
+    }
+
+    private void loadSportTable() {
+
+        try {
+
+            ResultSet rs = connection_ol.search("SELECT * FROM `sport_time` INNER JOIN `sports` ON `sport_time`.`sports_sports_id` = `sports`.`sports_id` "
+                    + "INNER JOIN `days` ON `sport_time`.`days_day_id` = `days`.`day_id`");
+
+            DefaultTableModel model = (DefaultTableModel) sportTable.getModel();
+            model.setRowCount(0);
+
+            while (rs.next()) {
+                Vector sportVector = new Vector();
+                sportVector.add(rs.getString("sport_time_id"));
+                sportVector.add(rs.getString("sports.sport_name"));
+                sportVector.add(rs.getString("days.day_name"));
+                sportVector.add(rs.getString("start_time"));
+                sportVector.add(rs.getString("end_time"));
+
+                model.addRow(sportVector);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void Clear() {
+        sportCombo.setSelectedIndex(0);
+        dayCombo.setSelectedIndex(0);
+        start_time.setText("");
+        end_time.setText("");
     }
 
     /**
@@ -33,8 +128,8 @@ public class Sport_time_table extends javax.swing.JPanel {
         background7 = new SMMV.Component.Background();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jComboBox5 = new javax.swing.JComboBox<>();
-        jComboBox6 = new javax.swing.JComboBox<>();
+        sportCombo = new javax.swing.JComboBox<>();
+        dayCombo = new javax.swing.JComboBox<>();
         jLabel11 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         start_time = new javax.swing.JTextField();
@@ -42,13 +137,14 @@ public class Sport_time_table extends javax.swing.JPanel {
         end_time = new javax.swing.JTextField();
         buttonGradient6 = new SMMV.Component.ButtonGradient();
         buttonGradient7 = new SMMV.Component.ButtonGradient();
+        buttonGradient8 = new SMMV.Component.ButtonGradient();
         background4 = new SMMV.Component.Background();
         jLabel12 = new javax.swing.JLabel();
         background6 = new SMMV.Component.Background();
         jLabel13 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        search_field = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        sportTable = new javax.swing.JTable();
         jSeparator5 = new javax.swing.JSeparator();
         jLabel14 = new javax.swing.JLabel();
         jLabel26 = new javax.swing.JLabel();
@@ -91,11 +187,11 @@ public class Sport_time_table extends javax.swing.JPanel {
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
         jLabel10.setText("Select Sport");
 
-        jComboBox5.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jComboBox5.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sportCombo.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        sportCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jComboBox6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jComboBox6.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        dayCombo.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        dayCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
@@ -125,11 +221,31 @@ public class Sport_time_table extends javax.swing.JPanel {
         buttonGradient6.setColor1(new java.awt.Color(0, 0, 255));
         buttonGradient6.setColor2(new java.awt.Color(139, 139, 252));
         buttonGradient6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        buttonGradient6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonGradient6ActionPerformed(evt);
+            }
+        });
 
         buttonGradient7.setText("Update Sport Time");
         buttonGradient7.setColor1(new java.awt.Color(0, 0, 255));
         buttonGradient7.setColor2(new java.awt.Color(139, 139, 252));
         buttonGradient7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        buttonGradient7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonGradient7ActionPerformed(evt);
+            }
+        });
+
+        buttonGradient8.setText("Delete Sport Time");
+        buttonGradient8.setColor1(new java.awt.Color(0, 0, 255));
+        buttonGradient8.setColor2(new java.awt.Color(139, 139, 252));
+        buttonGradient8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        buttonGradient8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonGradient8ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout background2Layout = new javax.swing.GroupLayout(background2);
         background2.setLayout(background2Layout);
@@ -144,14 +260,15 @@ public class Sport_time_table extends javax.swing.JPanel {
                         .addComponent(background7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jComboBox5, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox6, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(sportCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(dayCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(start_time)
                     .addComponent(endTimeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(end_time, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(buttonGradient6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(buttonGradient7, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE))
+                    .addComponent(buttonGradient7, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
+                    .addComponent(buttonGradient8, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE))
                 .addContainerGap(19, Short.MAX_VALUE))
         );
         background2Layout.setVerticalGroup(
@@ -164,11 +281,11 @@ public class Sport_time_table extends javax.swing.JPanel {
                 .addGap(28, 28, 28)
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(sportCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel11)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(dayCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -181,6 +298,8 @@ public class Sport_time_table extends javax.swing.JPanel {
                 .addComponent(buttonGradient6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(buttonGradient7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(buttonGradient8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -209,9 +328,19 @@ public class Sport_time_table extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTextField1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        search_field.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        search_field.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                search_fieldActionPerformed(evt);
+            }
+        });
+        search_field.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                search_fieldKeyPressed(evt);
+            }
+        });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        sportTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -230,7 +359,12 @@ public class Sport_time_table extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        sportTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                sportTableMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(sportTable);
 
         jSeparator5.setForeground(new java.awt.Color(0, 255, 204));
 
@@ -269,8 +403,8 @@ public class Sport_time_table extends javax.swing.JPanel {
                         .addComponent(background6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 473, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 723, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 723, Short.MAX_VALUE)
+                    .addComponent(search_field))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
         background4Layout.setVerticalGroup(
@@ -281,7 +415,7 @@ public class Sport_time_table extends javax.swing.JPanel {
                     .addComponent(background6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(search_field, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -320,13 +454,149 @@ public class Sport_time_table extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        timePicker1.showPopup(this, 100,100);
+        timePicker1.showPopup(this, 100, 100);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void endTimeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endTimeButtonActionPerformed
         // TODO add your handling code here:
-        timePicker2.showPopup(this, 100,100);
+        timePicker2.showPopup(this, 100, 100);
     }//GEN-LAST:event_endTimeButtonActionPerformed
+
+    private void buttonGradient6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGradient6ActionPerformed
+        // TODO add your handling code here:
+        String sportName = String.valueOf(sportCombo.getSelectedItem());
+        String dayName = String.valueOf(dayCombo.getSelectedItem());
+        String startTime = start_time.getText();
+        String endTime = end_time.getText();
+
+        if (sportName.equals("Select Sport")) {
+            JOptionPane.showMessageDialog(this, "Please Select Sport!", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (dayName.equals("Select day")) {
+            JOptionPane.showMessageDialog(this, "Please Select Day!", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (startTime.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please Select Start Time!", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (endTime.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please Select End Time!", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else {
+            try {
+                ResultSet sportRs = connection_ol.search("SELECT * FROM `sport_time` WHERE `sports_sports_id`='" + sport_map.get(sportName) + "' AND "
+                        + "`days_day_id`='" + day_map.get(dayName) + "'");
+
+                if (!sportRs.next()) {
+
+                    connection_ol.iud("INSERT INTO `sport_time` (`start_time`,`end_time`,`days_day_id`,`sports_sports_id`) "
+                            + "VALUES ('" + startTime + "','" + endTime + "','" + day_map.get(dayName) + "','" + sport_map.get(sportName) + "')");
+                    loadSportTable();
+                    Clear();
+                } else {
+                    JOptionPane.showMessageDialog(this, "This Sport Time Already Added!", "Warning", JOptionPane.WARNING_MESSAGE);
+                }
+            } catch (java.sql.SQLException e) {
+            }
+        }
+
+    }//GEN-LAST:event_buttonGradient6ActionPerformed
+
+    private void sportTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sportTableMouseClicked
+        // TODO add your handling code here:
+        if (evt.getClickCount() == 2) {
+            buttonGradient6.setEnabled(false);
+            sportCombo.setEnabled(false);
+            int row = sportTable.getSelectedRow();
+
+            sportId = String.valueOf(sportTable.getValueAt(row, 0));
+
+            try {
+                ResultSet sportRs = connection_ol.search("SELECT * FROM `sport_time` WHERE `sport_time_id` = '" + String.valueOf(sportTable.getValueAt(row, 0)) + "'");
+
+                if (sportRs.next()) {
+
+                    String sportName = String.valueOf(sportTable.getValueAt(row, 1));
+                    sportCombo.setSelectedItem(sportName);
+                    String dayName = String.valueOf(sportTable.getValueAt(row, 2));
+                    dayCombo.setSelectedItem(dayName);
+                    start_time.setText(String.valueOf(sportTable.getValueAt(row, 3)));
+                    end_time.setText(String.valueOf(sportTable.getValueAt(row, 4)));
+                }
+
+            } catch (java.sql.SQLException e) {
+            }
+        }
+    }//GEN-LAST:event_sportTableMouseClicked
+
+    private void buttonGradient7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGradient7ActionPerformed
+        // TODO add your handling code here:
+        if (sportTable.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(this, "Please Select Sport to update or delete", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else {
+            String dayName = String.valueOf(dayCombo.getSelectedItem());
+            String startTime = start_time.getText();
+            String endTime = end_time.getText();
+
+            if (dayName.equals("Select day")) {
+                JOptionPane.showMessageDialog(this, "Please Select Day!", "Warning", JOptionPane.WARNING_MESSAGE);
+            } else if (startTime.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please Select Start Time!", "Warning", JOptionPane.WARNING_MESSAGE);
+            } else if (endTime.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please Select End Time!", "Warning", JOptionPane.WARNING_MESSAGE);
+            } else {
+
+                connection_ol.iud("UPDATE `sport_time` SET `start_time`='" + startTime + "',`end_time`='" + endTime + "',`days_day_id`='" + day_map.get(dayName) + "'");
+                JOptionPane.showMessageDialog(this, "Sport Updated Successfully.", "Success", JOptionPane.WARNING_MESSAGE);
+                loadSportTable();
+                Clear();
+                buttonGradient6.setEnabled(true);
+                sportCombo.setEnabled(true);
+            }
+        }
+    }//GEN-LAST:event_buttonGradient7ActionPerformed
+
+    private void buttonGradient8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGradient8ActionPerformed
+        // TODO add your handling code here:
+        if (sportTable.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(this, "Please Select Sport to update or delete", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else {
+
+            connection_ol.iud("DELETE FROM `sport_time` WHERE `sport_time_id`='"+sportId+"'");
+            JOptionPane.showMessageDialog(this, "Sport Delete Successfully.", "Success", JOptionPane.WARNING_MESSAGE);
+            loadSportTable();
+            Clear();
+            buttonGradient6.setEnabled(true);
+            sportCombo.setEnabled(true);
+
+        }
+    }//GEN-LAST:event_buttonGradient8ActionPerformed
+
+    private void search_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_fieldActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_search_fieldActionPerformed
+
+    private void search_fieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_search_fieldKeyPressed
+        // TODO add your handling code here:
+         String search = search_field.getText();
+        
+        try {
+              ResultSet rs = connection_ol.search("SELECT * FROM `sport_time` INNER JOIN `sports` ON `sport_time`.`sports_sports_id` = `sports`.`sports_id` "
+                    + "INNER JOIN `days` ON `sport_time`.`days_day_id` = `days`.`day_id` WHERE `sports.sport_name`  LIKE '"+search+"'");
+
+            DefaultTableModel model = (DefaultTableModel) sportTable.getModel();
+            model.setRowCount(0);
+
+            while (rs.next()) {
+                Vector sportVector = new Vector();
+                sportVector.add(rs.getString("sport_time_id"));
+                sportVector.add(rs.getString("sports.sport_name"));
+                sportVector.add(rs.getString("days.day_name"));
+                sportVector.add(rs.getString("start_time"));
+                sportVector.add(rs.getString("end_time"));
+
+                model.addRow(sportVector);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_search_fieldKeyPressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -336,11 +606,11 @@ public class Sport_time_table extends javax.swing.JPanel {
     private SMMV.Component.Background background7;
     private SMMV.Component.ButtonGradient buttonGradient6;
     private SMMV.Component.ButtonGradient buttonGradient7;
+    private SMMV.Component.ButtonGradient buttonGradient8;
+    private javax.swing.JComboBox<String> dayCombo;
     private javax.swing.JButton endTimeButton;
     private javax.swing.JTextField end_time;
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox5;
-    private javax.swing.JComboBox<String> jComboBox6;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -354,8 +624,9 @@ public class Sport_time_table extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator5;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField search_field;
+    private javax.swing.JComboBox<String> sportCombo;
+    private javax.swing.JTable sportTable;
     private javax.swing.JTextField start_time;
     private com.raven.swing.TimePicker timePicker1;
     private com.raven.swing.TimePicker timePicker2;
