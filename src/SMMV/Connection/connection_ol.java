@@ -17,7 +17,7 @@ public class connection_ol {
 
     private static Connection connection;
     private static final String USER = "root";
-    private static final String PASSWORD = "Ravidu2005Oct13#";
+    private static final String PASSWORD = "Hasinthajava12345!!";
 //    Hasinthajava12345!!
 //    Ravidu2005Oct13#
 
