@@ -28,6 +28,7 @@ public class Teacher_time_table extends javax.swing.JPanel {
     HashMap<String, String> classtMap = new HashMap<>();
 
     String updateID = "";
+    
 
     /**
      * Creates new form Teacher_time_table
@@ -197,6 +198,7 @@ public class Teacher_time_table extends javax.swing.JPanel {
         jComboBox11.setSelectedIndex(0);
         buttonGradient6.setEnabled(true);
         buttonGradient7.setEnabled(false);
+        System.out.println("fff");
 
     }
 
