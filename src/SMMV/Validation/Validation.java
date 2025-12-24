@@ -40,6 +40,12 @@ public enum Validation {
             return "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$";
         }
         
+    }, INT_VALIDATION{
+        @Override
+        public String validate() {
+            return "^(\\d+)$";
+        }
+        
     };
 
     public String validate() {

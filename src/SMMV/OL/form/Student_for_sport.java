@@ -4,9 +4,16 @@
  */
 package SMMV.OL.form;
 
+import SMMV.Connection.connection_ol;
 import com.raven.event.EventTimePicker;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.util.HashMap;
+import java.util.Vector;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -14,23 +21,104 @@ import java.awt.event.ActionListener;
  */
 public class Student_for_sport extends javax.swing.JPanel {
 
+    HashMap<String, String> sport_mamp = new HashMap<>();
+    HashMap<String, String> student_map = new HashMap<>();
+    
+    String updateID = "";
+
     /**
      * Creates new form Sport_Managment
      */
     public Student_for_sport() {
         initComponents();
+        init();
+        loadTable();
+        clear();
         timePicker1.addEventTimePicker(new EventTimePicker() {
             @Override
             public void timeSelected(String string) {
             }
         });
-        
+
         timePicker1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
+
             }
         });
+    }
+    
+    private void clear(){
+    
+        buttonGradient4.setEnabled(true);
+        buttonGradient5.setEnabled(false);
+        jComboBox1.setSelectedIndex(0);
+        jComboBox4.setSelectedIndex(0);
+    
+    }
+
+    private void loadTable() {
+
+        try {
+
+            ResultSet rs = connection_ol.search("SELECT * FROM `sports_has_student` INNER JOIN `student` ON `sports_has_student`.`student_student_id` = `student`.`student_id` "
+                    + "INNER JOIN `sports` ON `sports_has_student`.`sports_sports_id` = `sports`.`sports_id`");
+
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            model.setRowCount(0);
+
+            while (rs.next()) {
+                Vector employeeVector = new Vector();
+                employeeVector.add(rs.getString("sports_has_student_id"));
+                employeeVector.add(rs.getString("sports.sport_name"));
+                employeeVector.add(rs.getString("student.first_name") + " " + rs.getString("student.last_name"));
+                model.addRow(employeeVector);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void init() {
+
+        try {
+            Vector user_typeVector = new Vector();
+            user_typeVector.add("Select Sport...");
+
+            ResultSet sportRs = connection_ol.search("SELECT * FROM `sports`");
+
+            while (sportRs.next()) {
+
+                user_typeVector.add(sportRs.getString("sport_name"));
+                sport_mamp.put(sportRs.getString("sport_name"), sportRs.getString("sports_id"));
+            }
+
+            jComboBox1.setModel(new DefaultComboBoxModel<>(user_typeVector));
+
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Vector user_typeVector = new Vector();
+            user_typeVector.add("Select Student...");
+
+            ResultSet studentRs = connection_ol.search("SELECT * FROM `student`");
+
+            while (studentRs.next()) {
+
+                user_typeVector.add(studentRs.getString("first_name") + " " + studentRs.getString("last_name"));
+                student_map.put((studentRs.getString("first_name") + " " + studentRs.getString("last_name")), studentRs.getString("student_id"));
+            }
+
+            jComboBox4.setModel(new DefaultComboBoxModel<>(user_typeVector));
+
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -51,10 +139,6 @@ public class Student_for_sport extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         jComboBox4 = new javax.swing.JComboBox<>();
         buttonGradient4 = new SMMV.Component.ButtonGradient();
@@ -110,20 +194,6 @@ public class Student_for_sport extends javax.swing.JPanel {
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Select Sport");
 
-        jComboBox2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setText("Select Grade");
-
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setText("Select Class");
-
-        jComboBox3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Select Student");
@@ -135,11 +205,21 @@ public class Student_for_sport extends javax.swing.JPanel {
         buttonGradient4.setColor1(new java.awt.Color(0, 0, 255));
         buttonGradient4.setColor2(new java.awt.Color(139, 139, 252));
         buttonGradient4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        buttonGradient4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonGradient4ActionPerformed(evt);
+            }
+        });
 
         buttonGradient5.setText("Update");
         buttonGradient5.setColor1(new java.awt.Color(0, 0, 255));
         buttonGradient5.setColor2(new java.awt.Color(139, 139, 252));
         buttonGradient5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        buttonGradient5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonGradient5ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout background2Layout = new javax.swing.GroupLayout(background2);
         background2.setLayout(background2Layout);
@@ -156,16 +236,12 @@ public class Student_for_sport extends javax.swing.JPanel {
                             .addComponent(buttonGradient5, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
                             .addComponent(buttonGradient4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jComboBox4, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, background2Layout.createSequentialGroup()
                                 .addComponent(background5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jComboBox2, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jComboBox3, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(17, 17, Short.MAX_VALUE))))
         );
         background2Layout.setVerticalGroup(
@@ -180,22 +256,14 @@ public class Student_for_sport extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(buttonGradient4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(buttonGradient5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jSeparator5.setForeground(new java.awt.Color(0, 255, 204));
@@ -246,6 +314,11 @@ public class Student_for_sport extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -278,27 +351,27 @@ public class Student_for_sport extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel26))
                     .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(background4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(background4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(background4Layout.createSequentialGroup()
                             .addComponent(background6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 473, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 723, Short.MAX_VALUE)
-                        .addComponent(jSeparator5)))
-                .addContainerGap(15, Short.MAX_VALUE))
+                        .addComponent(jSeparator5)
+                        .addComponent(jTextField1)))
+                .addGap(15, 15, 15))
         );
         background4Layout.setVerticalGroup(
             background4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(background4Layout.createSequentialGroup()
                 .addGap(13, 13, 13)
                 .addGroup(background4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(background6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(background6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -326,10 +399,10 @@ public class Student_for_sport extends javax.swing.JPanel {
         background1Layout.setVerticalGroup(
             background1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(background1Layout.createSequentialGroup()
-                .addGroup(background1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(background1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(background4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(background2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 0, 0))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -344,6 +417,84 @@ public class Student_for_sport extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void buttonGradient4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGradient4ActionPerformed
+        if (jComboBox1.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(this, "Please Select Sport", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (jComboBox4.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(this, "Please Select Student", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else {
+
+            try {
+                ResultSet rs = connection_ol.search("SELECT * FROM `sports_has_student` WHERE `student_student_id` = '" + student_map.get(jComboBox4.getSelectedItem()) + "' "
+                        + "AND `sports_sports_id` = '" + sport_mamp.get(jComboBox1.getSelectedItem()) + "'");
+
+                if (rs.next()) {
+                    JOptionPane.showMessageDialog(this, "This Student already added on this Sport", "Warning", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    
+                    connection_ol.iud("INSERT INTO `sports_has_student` (`student_student_id`,`sports_sports_id`) "
+                            + "VALUES ('"+student_map.get(jComboBox4.getSelectedItem())+"','"+sport_mamp.get(jComboBox1.getSelectedItem())+"')");
+                    
+                    JOptionPane.showMessageDialog(this, "OK", "Success", JOptionPane.OK_OPTION);
+                    loadTable();
+                    clear();
+                    
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+    }//GEN-LAST:event_buttonGradient4ActionPerformed
+
+    private void buttonGradient5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGradient5ActionPerformed
+        if (jComboBox1.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(this, "Please Select Sport", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (jComboBox4.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(this, "Please Select Student", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else {
+
+            try {
+                ResultSet rs = connection_ol.search("SELECT * FROM `sports_has_student` WHERE `student_student_id` = '" + student_map.get(jComboBox4.getSelectedItem()) + "' "
+                        + "AND `sports_sports_id` = '" + sport_mamp.get(jComboBox1.getSelectedItem()) + "'");
+
+                if (rs.next()) {
+                    JOptionPane.showMessageDialog(this, "This Student already added on this Sport", "Warning", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    
+                    connection_ol.iud("UPDATE `sports_has_student` SET `student_student_id` = '"+student_map.get(jComboBox4.getSelectedItem())+"' , "
+                            + "`sports_sports_id` = '"+sport_mamp.get(jComboBox1.getSelectedItem())+"' WHERE `sports_has_student_id` = '"+updateID+"'");
+                    
+                    JOptionPane.showMessageDialog(this, "Updated", "Success", JOptionPane.OK_OPTION);
+                    loadTable();
+                    clear();
+                    
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+    }//GEN-LAST:event_buttonGradient5ActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        if (evt.getClickCount() == 2) {
+
+            buttonGradient4.setEnabled(false);
+            buttonGradient5.setEnabled(true);
+
+            int row = jTable1.getSelectedRow();
+
+            updateID = String.valueOf(jTable1.getValueAt(row, 0));
+
+            jComboBox1.setSelectedItem(String.valueOf(jTable1.getValueAt(row, 1)));
+            jComboBox4.setSelectedItem(String.valueOf(jTable1.getValueAt(row, 2)));
+
+        }
+    }//GEN-LAST:event_jTable1MouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private SMMV.Component.Background background1;
@@ -354,8 +505,6 @@ public class Student_for_sport extends javax.swing.JPanel {
     private SMMV.Component.ButtonGradient buttonGradient4;
     private SMMV.Component.ButtonGradient buttonGradient5;
     private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -366,8 +515,6 @@ public class Student_for_sport extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
