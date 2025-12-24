@@ -9,7 +9,6 @@ import SMMV.OL.form.View_Time_Table;
 import SMMV.OL.form.Employee;
 import SMMV.OL.form.Grade_Sports;
 import SMMV.OL.form.Section_Subject_for_Teacher;
-import SMMV.OL.form.Sport_time_table;
 import SMMV.OL.form.Student_for_sport;
 import SMMV.OL.form.Student;
 import SMMV.OL.form.Subject;
@@ -64,9 +63,6 @@ public class Dashboard_ol extends javax.swing.JFrame {
 //                    System.out.println("Logout");
                 }else if (index == 7) {
                     showForm(new Student_for_sport());
-//                    System.out.println("Logout");
-                }else if (index == 8) {
-                    showForm(new Sport_time_table());
 //                    System.out.println("Logout");
                 }else if (index == 9) {
                     showForm(new Teacher_time_table());
