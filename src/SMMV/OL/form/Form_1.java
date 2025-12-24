@@ -27,18 +27,74 @@ public class Form_1 extends javax.swing.JPanel {
     private void initComponents() {
 
         background1 = new SMMV.Component.Background();
+        background2 = new SMMV.Component.Background();
+        card_11 = new SMMV.Component.Card_1();
+        card_21 = new SMMV.Component.Card_2();
+        card2 = new SMMV.Component.Card();
+        background3 = new SMMV.Component.Background();
 
-        background1.setBackground(new java.awt.Color(217, 217, 217));
+        setBackground(new java.awt.Color(0, 0, 0));
+
+        background1.setBackground(new java.awt.Color(0, 0, 0));
+
+        card_11.setColor1(new java.awt.Color(102, 255, 102));
+        card_11.setColor2(new java.awt.Color(51, 204, 0));
+
+        card_21.setColor1(new java.awt.Color(255, 0, 0));
+        card_21.setColor2(new java.awt.Color(102, 0, 0));
+
+        card2.setColor1(new java.awt.Color(0, 255, 255));
+        card2.setColor2(new java.awt.Color(0, 0, 204));
+
+        javax.swing.GroupLayout background2Layout = new javax.swing.GroupLayout(background2);
+        background2.setLayout(background2Layout);
+        background2Layout.setHorizontalGroup(
+            background2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(background2Layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(card2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(card_11, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(card_21, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(14, 14, 14))
+        );
+        background2Layout.setVerticalGroup(
+            background2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(background2Layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addGroup(background2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(card2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(background2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(card_11, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(card_21, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)))
+                .addContainerGap(17, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout background3Layout = new javax.swing.GroupLayout(background3);
+        background3.setLayout(background3Layout);
+        background3Layout.setHorizontalGroup(
+            background3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1098, Short.MAX_VALUE)
+        );
+        background3Layout.setVerticalGroup(
+            background3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 419, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout background1Layout = new javax.swing.GroupLayout(background1);
         background1.setLayout(background1Layout);
         background1Layout.setHorizontalGroup(
             background1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1098, Short.MAX_VALUE)
+            .addComponent(background2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(background3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         background1Layout.setVerticalGroup(
             background1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 623, Short.MAX_VALUE)
+            .addGroup(background1Layout.createSequentialGroup()
+                .addComponent(background2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(background3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -56,5 +112,10 @@ public class Form_1 extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private SMMV.Component.Background background1;
+    private SMMV.Component.Background background2;
+    private SMMV.Component.Background background3;
+    private SMMV.Component.Card card2;
+    private SMMV.Component.Card_1 card_11;
+    private SMMV.Component.Card_2 card_21;
     // End of variables declaration//GEN-END:variables
 }

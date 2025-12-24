@@ -52,14 +52,15 @@ public class Card extends javax.swing.JPanel {
         lbTitle = new javax.swing.JLabel();
         lbValues = new javax.swing.JLabel();
 
-        lbIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lk/chandula/image/stock.png"))); // NOI18N
+        lbIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SMMV/OL/img/student_dashboard.png"))); // NOI18N
 
         lbTitle.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
         lbTitle.setForeground(new java.awt.Color(255, 255, 255));
-        lbTitle.setText("Stock Total");
+        lbTitle.setText("Student Count");
 
         lbValues.setFont(new java.awt.Font("sansserif", 1, 22)); // NOI18N
         lbValues.setForeground(new java.awt.Color(255, 255, 255));
+        lbValues.setText("25");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -70,22 +71,22 @@ public class Card extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lbValues, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(49, 49, 49))
+                        .addContainerGap(71, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lbTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
-                        .addComponent(lbIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(20, 20, 20))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lbIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(42, 42, 42))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lbIcon, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
-                    .addComponent(lbTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
-                .addComponent(lbValues)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lbIcon)
+                    .addComponent(lbTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lbValues, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
                 .addGap(20, 20, 20))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -108,17 +109,13 @@ public class Card extends javax.swing.JPanel {
         try {
             
             double total = 0;
-            ResultSet stockResult = connection_ol.search("SELECT * FROM `stock`");
-            while (stockResult.next()) {                
+            ResultSet studentResult = connection_ol.search("SELECT * FROM `student` WHERE `status_status_id`='1'");
+            while (studentResult.next()) {                
                 
-                int qty = Integer.parseInt(stockResult.getString("qty"));
-                double selling_price = stockResult.getDouble("selling_price");
-                
-                double item_total = qty * selling_price;
-                total += item_total;
+                total += 1;
                 
             }
-            lbValues.setText("RS : " +String.valueOf( total)+"0");
+            lbValues.setText(String.valueOf( total));
         } catch (Exception e) {
         }
     }

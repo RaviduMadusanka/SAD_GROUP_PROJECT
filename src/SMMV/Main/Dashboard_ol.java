@@ -5,7 +5,7 @@
 package SMMV.Main;
 
 import SMMV.Event.EventMenu;
-import SMMV.OL.form.Class_Time_Table;
+import SMMV.OL.form.View_Time_Table;
 import SMMV.OL.form.Employee;
 import SMMV.OL.form.Grade_Sports;
 import SMMV.OL.form.Section_Subject_for_Teacher;
@@ -15,7 +15,7 @@ import SMMV.OL.form.Student;
 import SMMV.OL.form.Subject;
 import SMMV.OL.form.Teacher;
 import SMMV.OL.form.Teacher_time_table;
-import SMMV.OL.form.Dashbode;
+import SMMV.OL.form.Form_1;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatNightOwlContrastIJTheme;
 import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatNightOwlIJTheme;
@@ -38,12 +38,12 @@ public class Dashboard_ol extends javax.swing.JFrame {
         initComponents();
                 search_field.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Search");
         setBackground(new Color(0, 0, 0, 0));
-        showForm(new Dashbode(1));
+        showForm(new Form_1());
            EventMenu event = new EventMenu() {
             @Override
             public void selected(int index) {
                 if (index == 0) {
-                    showForm(new Dashbode(index));
+                    showForm(new Form_1());
                 } else if (index == 1) {
                     showForm(new Employee());
 //                    System.out.println("Logout");
@@ -72,7 +72,7 @@ public class Dashboard_ol extends javax.swing.JFrame {
                     showForm(new Teacher_time_table());
 //                    System.out.println("Logout");
                 }else if (index == 10) {
-                    showForm(new Class_Time_Table());
+                    showForm(new View_Time_Table());
 //                    System.out.println("Logout");
                 }
             }
