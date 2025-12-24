@@ -5,7 +5,7 @@
 package SMMV.Main;
 
 import SMMV.Event.EventMenu;
-import SMMV.OL.form.Class_Time_Table;
+import SMMV.OL.form.View_Time_Table;
 import SMMV.OL.form.Employee;
 import SMMV.OL.form.Grade_Sports;
 import SMMV.OL.form.Section_Subject_for_Teacher;
@@ -72,7 +72,7 @@ public class Dashboard_ol extends javax.swing.JFrame {
                     showForm(new Teacher_time_table());
 //                    System.out.println("Logout");
                 }else if (index == 10) {
-                    showForm(new Class_Time_Table());
+                    showForm(new View_Time_Table());
 //                    System.out.println("Logout");
                 }
             }
