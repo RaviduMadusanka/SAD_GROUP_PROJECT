@@ -36,7 +36,7 @@ public class Sport_time_table extends javax.swing.JPanel {
         loadSport();
         loadSportDay();
         loadSportTable();
-        System.out.println("jjjg");
+
     }
 
     private void loadSport() {
@@ -55,6 +55,7 @@ public class Sport_time_table extends javax.swing.JPanel {
             sportCombo.setModel(new DefaultComboBoxModel<>(sportVector));
         } catch (java.sql.SQLException e) {
 //                        SignIn.logger.warning(e.getMessage());
+System.out.println("fffff");
             System.out.println(e);
         }
     }
