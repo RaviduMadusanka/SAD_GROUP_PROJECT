@@ -36,7 +36,7 @@ public class Sport_time_table extends javax.swing.JPanel {
         loadSport();
         loadSportDay();
         loadSportTable();
-
+        System.out.println("jjj");
     }
 
     private void loadSport() {
