@@ -48,6 +48,7 @@ public class Side_1 extends javax.swing.JPanel {
         addMenu(new ImageIcon(getClass().getResource("/SMMV/OL/img/sport.png")), "Sport time table", 8);
         addMenu(new ImageIcon(getClass().getResource("/SMMV/OL/img/time_table.png")), "Manage Teacher Time Table", 9);
         addMenu(new ImageIcon(getClass().getResource("/SMMV/OL/img/time_table.png")), "View & Print Time Table", 10);
+        addMenu(new ImageIcon(getClass().getResource("/SMMV/OL/img/time_table.png")), "Update Student Grade", 11);
         addEmpty();
         addMenu(new ImageIcon(getClass().getResource("/SMMV/OL/img/logout.png")), "Logout", 14);
     }

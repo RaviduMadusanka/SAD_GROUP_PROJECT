@@ -15,6 +15,7 @@ import SMMV.OL.form.Subject;
 import SMMV.OL.form.Teacher;
 import SMMV.OL.form.Teacher_time_table;
 import SMMV.OL.form.Form_1;
+import SMMV.OL.form.StudentGradeUpdate;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatNightOwlContrastIJTheme;
 import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatNightOwlIJTheme;
@@ -70,6 +71,9 @@ public class Dashboard_ol extends javax.swing.JFrame {
                 }else if (index == 10) {
                     showForm(new View_Time_Table());
 //                    System.out.println("Logout");
+                }else if (index == 11) {
+                    showForm(new StudentGradeUpdate());
+//                    System.out.println("Logout");
                 }
             }
 
@@ -110,6 +114,7 @@ public class Dashboard_ol extends javax.swing.JFrame {
         jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setUndecorated(true);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
